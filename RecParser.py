@@ -4,18 +4,14 @@
 """
 The format of seq -- data flow -- of RecorManip modure:
 
-Sequence[conta1, conta2, conta3, ... , contaN]  # deque
+Sequence[date1, date2, date3, ... , dateN]  # dict
          --+---
+           | (mapping) (date : storage)
            |
-           +--> Container(date, storage)  # tuple
-                                ---+---
-                                   |
-               +-------------------+
-               |
-               +--> Storage[baserec1, baserec2, ... , baserecN]  # deque
-                            ---+----
-                               |
-                   +-----------+
+           +--> Storage[baserec1, baserec2, ... , baserecN]  # deque
+                        ---+----
+                           |
+                   +-------+
                    |
                    +--> BaseRecord(att1, att2, ... , attN)  # class
 """

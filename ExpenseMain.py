@@ -24,7 +24,7 @@ def timecheck(date):
 
 class Expense(object):
     def __init__(self):
-        self.conf_m = ConfigManip.ConfigManip()    # Configuration Manipulator
+        self.conf_m = ConfigManip.ConfigManip()
         self.rec_m = self.rec_unpickling()    # Records Manipulator
         self.projects = []
 

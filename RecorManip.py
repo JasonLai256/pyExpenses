@@ -1,6 +1,25 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
 
+"""
+The format of seq -- data structure -- of RecorManip class:
+
+_reclist[conta1, conta2, conta3, ... , contaN]  # list
+         --+---
+           |
+           +--> _RecContainer(date, storage)  # class
+                                    ---+---
+                                       |
+               +-----------------------+
+               |
+               +--> _storage[baserec1, baserec2, ... , baserecN]  # deque
+                             ---+----
+                                |
+                   +------------+
+                   |
+                   +--> BaseRecord(att1, att2, ... , attN)  # class
+"""
+
 import time
 import sys
 import os
