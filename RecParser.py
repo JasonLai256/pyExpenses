@@ -38,7 +38,7 @@ def asum(dataseq):
 
 def safe_append(seq, date_s, value):
     """This func can detect different conditions that may happen on
-    filter parser append data in new sequence and perform some procedure.
+    filter parser append data in new sequence or perform some procedure.
     
     @note: about the explicit description of Seq format, could lookup
     upon this file.
@@ -68,16 +68,16 @@ class Parser(object):
 
 class MainParser(Parser):
     def __init__(self, dataseq):
-        self.__d_seq = dataseq            # data sequence
-        self.__ft_list = []            # filter list
-        self.__stat_list = []            # statistic list
-        self.__analy_list = []            # analysis list
+        self._d_seq = dataseq            # data sequence
+        self._ft_list = []            # filter list
+        self._stat_list = []            # statistic list
+        self._analy_list = []            # analysis list
         super(MainParser, self).__init__('mainparser')
 
     def parse(self):
-        if not self.__stat_list and not self.__analy_list:
+        if not self._stat_list and not self._analy_list:
             # default strategy is use General_Analys to parse the fsequence.
-            self.__analy_list.append(General_Analys())
+            self._analy_list.append(General_Analys())
 
         dealed_seq = self._filter()
         analy_result = self._analysis(dealed_seq)
@@ -87,35 +87,35 @@ class MainParser(Parser):
 
     def _filter(self):
         """filter data sequence."""
-        if not self.__ft_list:
-            return self.__d_seq
+        if not self._ft_list:
+            return self._d_seq
         
-        dealed_seq = self.__d_seq
-        for parser in self.__ft_list:
+        dealed_seq = self._d_seq
+        for parser in self._ft_list:
             dealed_seq = parser.parse(dealed_seq)
         return dealed_seq
 
     def _statistic(self, dataseq):
         """statistic data sequence."""
         retval = []
-        for parser in self.__stat_list:
+        for parser in self._stat_list:
             retval.append(parser.parse(dataseq))
         return retval
 
     def _analysis(self, dataseq):
         """analyze data sequence."""
         retval = []
-        for parser in self.__analy_list:
+        for parser in self._analy_list:
             retval.append(parser.parse(dataseq))
         return retval
 
     def append(self, parser):
         if parser.type == 'filter':
-            self.__ft_list.append(parser)
+            self._ft_list.append(parser)
         elif parser.type == 'statistic':
-            self.__stat_list.append(parser)
+            self._stat_list.append(parser)
         elif parser.type == 'analysis':
-            self.__analy_list.append(parser)
+            self._analy_list.append(parser)
         else:
             EH.valueError("{0} is can't recognize.".format(parser.type))
 
@@ -124,9 +124,9 @@ class MainParser(Parser):
             self.append(par)
 
     def clear(self):
-        self.__ft_list = deque()
-        self.__stat_list = deque()
-        self.__analy_list = deque()
+        self._ft_list = deque()
+        self._stat_list = deque()
+        self._analy_list = deque()
 
     def getchild(self):
         pass
@@ -134,7 +134,7 @@ class MainParser(Parser):
         
     
 class Amount_Stat(Parser):
-    """统计data流中的金额总量。
+    """Figure out the amount of money in data flow.
     @note: can specify a few subparser that use to filter some
            situation.
     """
@@ -146,7 +146,7 @@ class Amount_Stat(Parser):
 
 
 class Count_Stat(Parser):
-    """统计data流中的Recore个数。
+    """Figure out the amount of records in data flow.
     @note: 是否应该 可选择是否返回Recs的具体项，待考虑。
     """
     def __init__(self):

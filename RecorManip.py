@@ -10,7 +10,7 @@ from collections import deque
 import ErrorHandle as EH
 
 class BaseRecord(object):
-    """保存记录的基本结构体，仅仅是条项记录功能
+    """Basic structure of single item use to store record.
     """
     def __init__(self, Type, Amount, Paidwith = '0',
                        Tag = '0', Note = None):
@@ -21,7 +21,6 @@ class BaseRecord(object):
         self.comment = str(Note)
 
     def __eq__(self, brec):
-        """判断传入参数是否与当前instance的属性相同 (==)."""
         return self.csm_type == brec.csm_type and \
                self.amount == brec.amount and \
                self.pmt_type == brec.pmt_type and \
@@ -29,7 +28,6 @@ class BaseRecord(object):
                self.comment == brec.comment
 
     def __ne__(self, brec):
-        """判断传入参数是否与当前instance的属性不同 (!=)."""
         return not self == brec
 
     def getAttr(self, AttrType):
@@ -78,7 +76,8 @@ class _RecContainer(object):
 
 
 class RecorManip(object):
-    """数据管理器，负责最基本的access,modify,retrieve等功能
+    """Record manipulator that offer some basic operations to mapulate data,
+    like access,modify,retrieve etc.
     """
     # testing control notation
     _test = False
@@ -99,7 +98,7 @@ class RecorManip(object):
         self.max_amount_date = ''
 
     def addItem(self, time, base_rec):
-        """添加一项纪录。"""
+        """add a basic record to storage."""
         if RecorManip._test:
             print "\tfunction: addItem"
         if not self.isExistence(time):
@@ -112,7 +111,7 @@ class RecorManip(object):
         self._insert(time, base_rec)
 
     def delItem(self, date, base_rec):
-        """delete one specified record.
+        """delete a specified record.
         @note: if date not exist,raise a exception.
         """
         if RecorManip._test:
@@ -198,7 +197,8 @@ class RecorManip(object):
         self._len = 0
 
     def importRecord(self, filename):
-        """备份数据到指定文件"""
+        """import a backup from specify file, note that it will override
+        original data."""
         if RecorManip._test:
             print "\tfunction: importRecord"
         self.clear()
@@ -211,7 +211,7 @@ class RecorManip(object):
             file.close()
 
     def exportRecord(self, filename):
-        """Export data records into the specified file.
+        """Export textual data records into the specified file.
         """
         if RecorManip._test:
             print "\tfunction: exportRecord"
