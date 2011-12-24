@@ -8,7 +8,7 @@ Sequence[date1, date2, date3, ... , dateN]  # dict
          --+---
            | (mapping) (date : storage)
            |
-           +--> Storage[baserec1, baserec2, ... , baserecN]  # deque
+           +--> Storage[baserec1, baserec2, ... , baserecN]  # list
                         ---+----
                            |
                    +-------+
@@ -22,36 +22,15 @@ from datetime import date
 import ErrorHandle as EH
 
 
-def asum(dataseq):
+def asum(datas):
     """Calculate the sum of amount in sequence.
     """
     amount = 0.0
     # items structure is a tuple such as (date, rec_deque)
-    for item in dataseq:        
-        amount += sum(record.amount for record in item[1])
+    for key in datas:
+        amount += sum(record.amount for record in datas[key])
     #Note: Decimal use quantize() to ensure output precision.
     return Decimal(str(amount)).quantize(Decimal('1.00'))
-
-def safe_append(seq, date_s, value):
-    """This func can detect different conditions that may happen on
-    filter parser append data in new sequence or perform some procedure.
-    
-    @note: about the explicit description of Seq format, could lookup
-    upon this file.
-    """
-    if not len(seq):
-        # Is seq empty?
-        seq.append( (date_s, deque()) )
-        seq[0][1].append(value)
-        return
-        
-    if seq[-1][0] == date_s:
-        # Date is already exist in seq. Note that Seq format is already
-        # sorted, we could use this feature to judge.
-        seq[-1][1].append(value)
-    else:
-        seq.append( (date_s, deque()) )
-        seq[-1][1].append(value)
 
 
 class Parser(object):
@@ -63,8 +42,8 @@ class Parser(object):
 
 
 class MainParser(Parser):
-    def __init__(self, dataseq):
-        self._d_seq = dataseq            # data sequence
+    def __init__(self, recgroup):
+        self._records = recgroup            # data sequence
         self._ft_list = []            # filter list
         self._stat_list = []            # statistic list
         self._analy_list = []            # analysis list
@@ -72,7 +51,7 @@ class MainParser(Parser):
 
     def parse(self):
         if not self._stat_list and not self._analy_list:
-            # default strategy is use General_Analys to parse the fsequence.
+            # default strategy is use General_Analys to parse the records.
             self._analy_list.append(General_Analys())
 
         dealed_seq = self._filter()
@@ -82,27 +61,27 @@ class MainParser(Parser):
         return analy_result, stat_result, dealed_seq
 
     def _filter(self):
-        """filter data sequence."""
+        """filter data container."""
         if not self._ft_list:
-            return self._d_seq
+            return self._records
         
-        dealed_seq = self._d_seq
+        dealed_seq = self._records.copy()
         for parser in self._ft_list:
             dealed_seq = parser.parse(dealed_seq)
         return dealed_seq
 
-    def _statistic(self, dataseq):
-        """statistic data sequence."""
+    def _statistic(self, recgroup):
+        """statistic data container."""
         retval = []
         for parser in self._stat_list:
-            retval.append(parser.parse(dataseq))
+            retval.append(parser.parse(recgroup))
         return retval
 
-    def _analysis(self, dataseq):
-        """analyze data sequence."""
+    def _analysis(self, recgroup):
+        """analyze data container."""
         retval = []
         for parser in self._analy_list:
-            retval.append(parser.parse(dataseq))
+            retval.append(parser.parse(recgroup))
         return retval
 
     def append(self, parser):
@@ -116,20 +95,20 @@ class MainParser(Parser):
             EH.valueError("{0} is can't recognize.".format(parser.type))
 
     def extend(self, plist):
-        for par in plist:
-            self.append(par)
+        for parser in plist:
+            self.append(parser)
 
     def clear(self):
-        self._ft_list = deque()
-        self._stat_list = deque()
-        self._analy_list = deque()
+        self._ft_list = []
+        self._stat_list = []
+        self._analy_list = []
 
     def getchild(self):
         pass
     
         
     
-class Amount_Stat(Parser):
+class Amount_Stat(Parser):   # ok
     """Figure out the amount of money in data flow.
     @note: can specify a few subparser that use to filter some
            situation.
@@ -137,41 +116,43 @@ class Amount_Stat(Parser):
     def __init__(self):
         super(Amount_Stat, self).__init__('statistic')
 
-    def parse(self, dataseq):
-        return 'Amount', asum(dataseq)
+    def parse(self, recgroup):
+        return 'Amount', asum(recgroup)
 
 
-class Count_Stat(Parser):
+class Count_Stat(Parser):   # ok
     """Figure out the amount of records in data flow.
     @note: 是否应该 可选择是否返回Recs的具体项，待考虑。
     """
     def __init__(self):
         super(Count_Stat, self).__init__('statistic')
 
-    def parse(self, dataseq):
+    def parse(self, recgroup):
         """Count the quantity of elements in sequence.
         """
-        csum = sum(len(item[1]) for item in dataseq)
+        csum = sum(len(item) for item in recgroup.values())
         return 'Count', csum
 
     
-class Type_Filter(Parser):
+class Type_Filter(Parser):   # ok
     """用于extract指定Type的Recores数据。"""
     def __init__(self, Optcode, AttrType = 'ConsumingType'):
         self.optcode = str(Optcode)
         self.attr = AttrType
         super(Type_Filter, self).__init__('filter')
 
-    def parse(self, dataseq):
-        retval = deque()
-        for item in dataseq:
-            for record in item[1]:
+    def parse(self, recgroup):
+        retval = {}
+        for kdate, records in recgroup.items():
+            for record in records:
                 if record.getAttr(self.attr) == self.optcode:
-                    safe_append(retval, item[0], record)
+                    if not retval.has_key(kdate):
+                        retval[kdate] = []
+                    retval[kdate].append(record)
         return retval
 
 
-class Money_Filter(Parser):
+class Money_Filter(Parser):   # ok
     """用于ectract指定金额范围内的Recores数据。"""
     def __init__(self, range1, range2 = None):
         if range2:
@@ -184,13 +165,14 @@ class Money_Filter(Parser):
         self._test()
         super(Money_Filter, self).__init__('filter')
 
-    def parse(self, dataseq):
-        retval = deque()
-        for item in dataseq:
-            for record in item[1]:
-                if self.start <= record.amount and \
-                record.amount <= self.stop:
-                    safe_append(retval, item[0], record)
+    def parse(self, recgroup):
+        retval = {}
+        for kdate, records in recgroup.items():
+            for record in records:
+                if self.start <= record.amount <= self.stop:
+                    if not retval.has_key(kdate):
+                        retval[kdate] = []
+                    retval[kdate].append(record)
         return retval
 
     def _test(self):
@@ -204,7 +186,7 @@ class PT_Filter(Parser):
     pass
 
 
-class DaysInWeek_Filter(Parser):
+class DaysInWeek_Filter(Parser):   # ok
     """Filter the days in weekday that specified by arglist.
 
     @note: about the days number, where Monday is 0 and Sunday is 6.
@@ -213,12 +195,12 @@ class DaysInWeek_Filter(Parser):
         self.weekdays = self._corre_and_test(arglist)
         super(DaysInWeek_Filter, self).__init__('filter')
 
-    def parse(self, dataseq):
-        retval = deque()
-        for item in dataseq:
-            da = self._createDate(item[0])
+    def parse(self, recgroup):
+        retval = {}
+        for kdate, records in recgroup.items():
+            da = self._createDate(kdate)
             if da.weekday() in self.weekdays:
-                retval.append(item)
+                retval[kdate] = records
         return retval
 
     def _corre_and_test(self, daylist):
@@ -242,19 +224,19 @@ class DaysInWeek_Filter(Parser):
         return date(y, m, d)
 
 
-class DaysInMonth_Filter(Parser):
+class DaysInMonth_Filter(Parser):   # ok
     """Filter the days in day of month that specified by arglist.
     """
     def __init__(self, arglist):
         self.days = self._corre_and_test(arglist)
         super(DaysInMonth_Filter, self).__init__('filter')
 
-    def parse(self, dataseq):
-        retval = deque()
-        for item in dataseq:
-            day = int(item[0][8:])
+    def parse(self, recgroup):
+        retval = {}
+        for kdate, records in recgroup.items():
+            day = int(kdate[8:])
             if day in self.days:
-                retval.append(item)
+                retval[kdate] = records
         return retval
 
     def _corre_and_test(self, daylist):
@@ -268,19 +250,19 @@ class DaysInMonth_Filter(Parser):
         return daylist
 
 
-class MthsInYear_Filter(Parser):
+class MthsInYear_Filter(Parser):   # ok
     """Filter the months in year that specified by arglist.
     """
     def __init__(self, arglist):
         self.mths = self._corre_and_test(arglist)
         super(MthsInYear_Filter, self).__init__('filter')
 
-    def parse(self, dataseq):
-        retval = deque()
-        for item in dataseq:
-            mth = int(item[0][5:7])
+    def parse(self, recgroup):
+        retval = {}
+        for kdate, records in recgroup.items():
+            mth = int(kdate[5:7])
             if mth in self.mths:
-                retval.append(item)
+                retval[kdate] = records
         return retval
 
     def _corre_and_test(self, mthlist):
@@ -299,16 +281,16 @@ class General_Analys(Parser):
     include figure out amount of different consuming type and the
     percentage of those amount.
 
-    @note: unit export format is:
-                item [csm_type, amount, percentage]
+    @note: the format of return values is:
+                item (csm_type, amount, percentage)
     """
     def __init__(self):
         super(General_Analys, self).__init__('analysis')
 
-    def parse(self, dataseq):
+    def parse(self, recgroup):
         valdict = {}
-        for item in dataseq:
-            for record in item[1]:
+        for kdate, records in recgroup.items():
+            for record in records:
                 if not valdict.has_key(record.csm_type):
                     valdict[record.csm_type] = [0.0, None]
 
@@ -324,7 +306,7 @@ class General_Analys(Parser):
     def _figure_percentage(self, valdict, asum):
         for key in valdict.keys():
             percent = valdict[key][0] / asum * 100
-            valdict[key][1] = percent
+            valdict[key][1] = '{0:.2f}'.format(percent)  # convert to formated str
 
     def _make_list(self, valdict):
         """From dictionary struc transform to list struc."""

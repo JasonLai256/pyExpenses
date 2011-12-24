@@ -81,9 +81,9 @@ if __name__ == '__main__':
     parsers.append(RP.Amount_Stat())
     parsers.append(RP.Count_Stat())
     parsers.append(RP.General_Analys())
-    parsers.append(RP.Type_Filter(cm.type2num('ConsumingType', '交通')))
+#    parsers.append(RP.Type_Filter(cm.type2num('ConsumingType', '交通')))
 #    parsers.append(RP.Money_Filter(10))
-#    parsers.append(RP.DaysInMonthp_Filter([x for x in xrange(1, 32)]))
+#    parsers.append(RP.DaysInMonth_Filter([x for x in xrange(1, 32)]))
 #    parsers.append(RP.MthsInYear_Filter([x for x in xrange(1, 13)]))
 #    parsers.append(RP.DaysInWeek_Filter([x for x in xrange(0, 7)]))
 
@@ -94,7 +94,7 @@ if __name__ == '__main__':
         analy_res, stat_res, seq = exp.figure_out(btime, etime, parsers)
         print '{0} to {1} :'.format(btime, etime)
         for item in analy_res[0][1]:
-            print '\t{0}  {1}  {2:.2f}%'.format(cm.num2type('ConsumingType', item[0]),
+            print '\t{0}  {1}  {2}%'.format(cm.num2type('ConsumingType', item[0]),
                                                     item[1],
                                                     item[2])
         print '\tsum = {0}, quantity = {1}, SeqLenght = {2}' \
@@ -110,8 +110,8 @@ if __name__ == '__main__':
 #    display('2008-07-01', '2011-07-20')
 #    display('2008-02-01', '2011-07-20')
 #    display('2007-07-01', '2011-07-20')
-    display('2007-02-01', '2011-07-20')
-    display('2006-07-01', '2011-07-20')
+#    display('2007-02-01', '2011-07-20')
+#    display('2006-07-01', '2011-07-20')
     display('2006-02-01', '2011-07-20')
     display('2005-02-01', '2011-10-31')
 

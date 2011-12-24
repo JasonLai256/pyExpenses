@@ -174,9 +174,10 @@ class RecorManip(object):
             )
         begin_ind = self._index(begin)
         end_ind = self._index(end) + 1
-        ret = deque()
+
+        ret = {}
         for elem in self._reclist[begin_ind:end_ind]:
-            ret.append( (elem._date, elem._storage) )
+            ret[elem._date] = elem._storage
         return ret
 
     def findDate(self, date):
