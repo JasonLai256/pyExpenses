@@ -19,6 +19,7 @@ Sequence[date1, date2, date3, ... , dateN]  # dict
 from decimal import Decimal
 from collections import deque
 from datetime import date
+
 import ErrorHandle as EH
 
 

@@ -26,6 +26,7 @@ import os
 from datetime import date
 from decimal import Decimal
 from collections import deque
+
 import ErrorHandle as EH
 
 class BaseRecord(object):
