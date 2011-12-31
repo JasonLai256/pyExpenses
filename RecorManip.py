@@ -23,7 +23,7 @@ _reclist[conta1, conta2, conta3, ... , contaN]  # list
 import time
 import sys
 import os
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from collections import deque
 
@@ -226,8 +226,12 @@ class RecorManip(object):
         file = open(filename)
         for line in file.readlines():
             dat = line.split(':')
+            y = int(dat[0][:4])
+            m = int(dat[0][5:7])
+            d = int(dat[0][8:])
+            rdate = date(y, m, d)
             tem = BaseRecord(dat[1], dat[2], dat[3], dat[4], dat[5])
-            self.addItem(dat[0], tem)
+            self.addItem(rdate, tem)
         else:
             file.close()
 
@@ -241,7 +245,7 @@ class RecorManip(object):
         for elem in self._reclist:
             outstr = ''
             for item in elem._storage:
-                outstr += elem._date
+                outstr += elem._date.isoformat()
                 tem = ':' + item.csm_type + \
                     ':' + str(item.amount) + \
                     ':' + item.pmt_type + \
@@ -326,20 +330,20 @@ if __name__ == '__main__':
     rm.importRecord('/home/jason/Py/Expenses/example.dat')
     
     print '\n', '=' * 40, '\n'
-    print rm.isExistence('2011-01-01')
-    print rm.isExistence('2011-05-01')
-    dat = rm.findDates('2011-04-11', 100)
+    print rm.isExistence(date(2011, 1, 1))
+    print rm.isExistence(date(2011, 5, 1))
+    dat = rm.findDates(date(2011, 4, 11), 100)
     for k, v in dat:
         print k, ' : ', len(v)
 
 
     print '\n', 30 * '-', '\n'
-    dat2 = rm.record_range('2011-01-01', '2011-07-04')
-    for k, v in dat2:
-        print k, ' : ', len(v)
+    dat2 = rm.record_range(date(2011, 1, 1), date(2011, 7, 4))
+    for k in dat2:
+        print k, ' : ', len(dat2[k])
         
     print '\n', 30 * '-', '\n'    
-    dat3 = rm.findDate('2011-06-18')
+    dat3 = rm.findDate(date(2011, 6, 18))
     for elem in dat3[1]:
         print dat3[0], elem.csm_type, elem.amount
 
@@ -347,23 +351,23 @@ if __name__ == '__main__':
     print '\n', 30 * '-', '\n'
     tem = BaseRecord(6, 62.958968721, 2, 1)
 #    newbr  = BaseRecord(5, 31)
-#    rm.updateItem('2006-05-18', tem, newbr)
-#    rm.delItem('2006-05-18', newbr)
+#    rm.updateItem(date(2006, 5, 18), tem, newbr)
+#    rm.delItem(date(2006, 5, 18), newbr)
     tem = BaseRecord('0', 1)
     newbr  = BaseRecord('1', '3131.33')
-#    rm.updateItem('2011-06-18', tem, newbr)
+#    rm.updateItem(date(2011, 6, 18), tem, newbr)
     
-    dat = rm.findDate('2011-06-18')
+    dat = rm.findDate(date(2011, 6, 18))
     for elem in dat[1]:
         print dat[0], elem.csm_type, elem.amount
 
 
     print '\n', 30 * '-', '\n'
     tem = BaseRecord('4', 3)
-    rm.addItem('2011-05-01', tem)
-    dat2 = rm.record_range('2011-01-01', '2011-07-04')
-    for k, v in dat2:
-        print k, ' : ', len(v)
+    rm.addItem(date(2011, 5, 1), tem)
+    dat2 = rm.record_range(date(2011, 1, 1), date(2011, 7, 4))
+    for k in dat2:
+        print k, ' : ', len(dat2[k])
 
 
     print '\n', 30 * '-', '\n'
@@ -387,23 +391,23 @@ if __name__ == '__main__':
     rm2.importRecord('/home/jason/Py/Expenses/example_export.dat')
     
     print '\n', '=' * 40, '\n'
-    print rm.isExistence('2011-01-01')
-    print rm.isExistence('2011-05-01')
-    dat = rm.findDates('2011-04-11', 100)
+    print rm.isExistence(date(2011, 1, 1))
+    print rm.isExistence(date(2011, 5, 1))
+    dat = rm.findDates(date(2011, 4, 11), 100)
     for k, v in dat:
         print k, ' : ', len(v)
     rm.clear()
     
     tem = BaseRecord('4', 3)
-    rm.addItem('2008-05-01', tem)
+    rm.addItem(date(2008, 5, 1), tem)
     tem = BaseRecord('4', 3)
-    rm.addItem('2009-05-01', tem)
+    rm.addItem(date(2009, 5, 1), tem)
     tem = BaseRecord('4', 3)
-    rm.addItem('2010-05-01', tem)
+    rm.addItem(date(2010, 5, 1), tem)
     tem = BaseRecord('4', 3)
-    rm.addItem('2012-05-01', tem)
+    rm.addItem(date(2012, 5, 1), tem)
     tem = BaseRecord('4', 3)
-    rm.addItem('2013-05-01', tem)
+    rm.addItem(date(2013, 5, 1), tem)
     rm.exportRecord('/home/jason/Py/Expenses/example_export2.dat')
     
     

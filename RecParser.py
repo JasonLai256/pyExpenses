@@ -109,7 +109,7 @@ class MainParser(Parser):
     
         
     
-class Amount_Stat(Parser):   # ok
+class Amount_Stat(Parser):
     """Figure out the amount of money in data flow.
     @note: can specify a few subparser that use to filter some
            situation.
@@ -121,7 +121,7 @@ class Amount_Stat(Parser):   # ok
         return 'Amount', asum(recgroup)
 
 
-class Count_Stat(Parser):   # ok
+class Count_Stat(Parser):
     """Figure out the amount of records in data flow.
     @note: 是否应该 可选择是否返回Recs的具体项，待考虑。
     """
@@ -135,7 +135,7 @@ class Count_Stat(Parser):   # ok
         return 'Count', csum
 
     
-class Type_Filter(Parser):   # ok
+class Type_Filter(Parser):
     """用于extract指定Type的Recores数据。"""
     def __init__(self, Optcode, AttrType = 'ConsumingType'):
         self.optcode = str(Optcode)
@@ -153,7 +153,7 @@ class Type_Filter(Parser):   # ok
         return retval
 
 
-class Money_Filter(Parser):   # ok
+class Money_Filter(Parser):
     """用于ectract指定金额范围内的Recores数据。"""
     def __init__(self, range1, range2 = None):
         if range2:
@@ -187,86 +187,75 @@ class PT_Filter(Parser):
     pass
 
 
-class DaysInWeek_Filter(Parser):   # ok
+class DaysInWeek_Filter(Parser):
     """Filter the days in weekday that specified by arglist.
 
     @note: about the days number, where Monday is 0 and Sunday is 6.
     """
     def __init__(self, arglist):
-        self.weekdays = self._corre_and_test(arglist)
+        self.weekdays = self._test_and_correct(arglist)
         super(DaysInWeek_Filter, self).__init__('filter')
 
     def parse(self, recgroup):
         retval = {}
         for kdate, records in recgroup.items():
-            da = self._createDate(kdate)
-            if da.weekday() in self.weekdays:
+            if kdate.weekday() in self.weekdays:
                 retval[kdate] = records
         return retval
 
-    def _corre_and_test(self, daylist):
+    def _test_and_correct(self, daylist):
         for i in xrange(len(daylist)):
-            int(daylist[i])
+            daylist[i] = int(daylist[i])
             
         for item in daylist:
             if not 0 <= item <= 6:
-                EH.valueError('{0} is not a correct number in weekday.' \
-                                  .format(item))
+                EH.valueError(
+                    '{0} is not a correct number in day of weekdays.'.format(item)
+                )
         return daylist
 
-    def _createDate(self, da):
-        """设定da的格式为'yyyy-mm-dd'."""
-        if type(da) == type(date.today()):
-            return da
-        
-        y = int(da[:4])
-        m = int(da[5:7])
-        d = int(da[8:])
-        return date(y, m, d)
 
-
-class DaysInMonth_Filter(Parser):   # ok
+class DaysInMonth_Filter(Parser):
     """Filter the days in day of month that specified by arglist.
     """
     def __init__(self, arglist):
-        self.days = self._corre_and_test(arglist)
+        self.days = self._test_and_correct(arglist)
         super(DaysInMonth_Filter, self).__init__('filter')
 
     def parse(self, recgroup):
         retval = {}
         for kdate, records in recgroup.items():
-            day = int(kdate[8:])
-            if day in self.days:
+            if kdate.day in self.days:
                 retval[kdate] = records
         return retval
 
-    def _corre_and_test(self, daylist):
+    def _test_and_correct(self, daylist):
         for i in xrange(len(daylist)):
-            int(daylist[i])
+            daylist[i] = int(daylist[i])
             
         for item in daylist:
             if not 1 <= item <= 31:
-                EH.valueError('{0} is not a correct number in day of months.' \
-                                  .format(item))
+                EH.valueError(
+                    '{0} is not a correct number in day of months.'.format(item)
+                )
         return daylist
 
 
-class MthsInYear_Filter(Parser):   # ok
+class MthsInYear_Filter(Parser):
     """Filter the months in year that specified by arglist.
     """
     def __init__(self, arglist):
-        self.mths = self._corre_and_test(arglist)
+        self.mths = self._test_and_correct(arglist)
         super(MthsInYear_Filter, self).__init__('filter')
 
     def parse(self, recgroup):
         retval = {}
         for kdate, records in recgroup.items():
-            mth = int(kdate[5:7])
-            if mth in self.mths:
+            if kdate.month in self.mths:
                 retval[kdate] = records
         return retval
 
-    def _corre_and_test(self, mthlist):
+    def _test_and_correct(self, mthlist):
         for i in xrange(len(mthlist)):
             int(mthlist[i])
             

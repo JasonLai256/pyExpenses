@@ -5,6 +5,7 @@ import os
 import sys
 import time
 from decimal import Decimal
+from datetime import date
 try:
     import cPickle as Pickle
 except:
@@ -16,7 +17,7 @@ import RecParser as RP
 import ErrorHandle as EH
 
 
-def timecheck(date):
+def datecheck(date):
     """检查date的格式是否符合ISO格式 'yyyy-mm-dd' """
     if date[4] == '-' and date[7] == '-':
         return True
@@ -41,7 +42,7 @@ class Expense(object):
             return Pickle.load(picfile)
 
     def addItem(self, time, baserec):
-        if not timecheck(time):
+        if not datecheck(time):
             EH.valueError('time is not valid iso format.')
         self.rec_m.addItem(time, baserec)
         Config.setDefaultType(baserec)
@@ -100,19 +101,19 @@ if __name__ == '__main__':
             .format(stat_res[0][1], stat_res[1][1], len(seq))
 
     
-#    display('2011-07-01', '2011-07-20')
-#    display('2011-02-01', '2011-07-20')
-#    display('2010-07-01', '2011-07-20')
-#    display('2010-02-01', '2011-07-20')
-#    display('2009-07-01', '2011-07-20')
-#    display('2009-02-01', '2011-07-20')
-#    display('2008-07-01', '2011-07-20')
-#    display('2008-02-01', '2011-07-20')
-#    display('2007-07-01', '2011-07-20')
-#    display('2007-02-01', '2011-07-20')
-#    display('2006-07-01', '2011-07-20')
-    display('2006-02-01', '2011-07-20')
-    display('2005-02-01', '2011-10-31')
+#    display(date(2011, 7, 1), date(2011, 7, 20))
+#    display(date(2011, 2, 1), date(2011, 7, 20))
+#    display(date(2010, 7, 1), date(2011, 7, 20))
+#    display(date(2010, 2, 1), date(2011, 7, 20))
+#    display(date(2009, 7, 1), date(2011, 7, 20))
+#    display(date(2009, 2, 1), date(2011, 7, 20))
+#    display(date(2008, 7, 1), date(2011, 7, 20))
+#    display(date(2008, 2, 1), date(2011, 7, 20))
+#    display(date(2007, 7, 1), date(2011, 7, 20))
+#    display(date(2007, 2, 1), date(2011, 7, 20))
+#    display(date(2006, 7, 1), date(2011, 7, 20))
+    display(date(2006, 2, 1), date(2011, 7, 20))
+    display(date(2005, 2, 1), date(2011, 10, 31))
 
 
 #    ad = exp.allData()
