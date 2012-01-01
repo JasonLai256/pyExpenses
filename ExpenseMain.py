@@ -11,7 +11,7 @@ try:
 except:
     import Pickle
 
-import RecorManip
+import RecManip
 from ConfigManip import Config
 import RecParser as RP
 import ErrorHandle as EH
@@ -36,7 +36,7 @@ class Expense(object):
     def rec_unpickling(self):
         fname = '/home/jason/Py/Expenses/records.dat'
         if not os.path.getsize(fname):
-            return RecorManip.RecorManip()
+            return RecManip.RecManip()
         else:
             picfile = open(fname)
             return Pickle.load(picfile)
@@ -52,7 +52,7 @@ class Expense(object):
         """
         starttime = time.time()
         
-        data = self.rec_m.record_range(begin, end)
+        data = self.rec_m.date_range(begin, end)
         parser = RP.MainParser(data)
         parser.extend(parsers)
 #        return parser.parse()
