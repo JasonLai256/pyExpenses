@@ -232,16 +232,17 @@ class PickleImpl(object):
             file.close()
 
     def _dump(self):
-        picfile = open('/home/jason/Py/Expenses/records.dat', 'wb')
+        fpath = os.path.join(os.path.abspath('.'), 'records.dat')
+        picfile = open(fpath, 'wb')
         Pickle.dump(self._reclist, picfile, 2)
         Pickle.dump(self._pwd, picfile, 2)
         Pickle.dump(self._len, picfile, 2)
         picfile.close()
 
     def _load(self, pwd):
-        fname = '/home/jason/Py/Expenses/records.dat'
-        isfile = os.path.isfile(fname)
-        if not isfile or not os.path.getsize(fname):
+        fpath = os.path.join(os.path.abspath('.'), 'records.dat')
+        isfile = os.path.isfile(fpath)
+        if not isfile or not os.path.getsize(fpath):
             self._reclist = []
             m = hashlib.sha256()
             # There is a default common pwd digest.
@@ -252,7 +253,7 @@ class PickleImpl(object):
                 # need to create a new store file of data
                 self._dump()
         else:
-            picfile = open(fname)
+            picfile = open(fpath)
             self._reclist = Pickle.load(picfile)
             self._pwd = Pickle.load(picfile)
             self._len = Pickle.load(picfile)

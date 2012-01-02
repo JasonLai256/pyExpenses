@@ -6,13 +6,16 @@ import sys
 import os
 import ErrorHandle as EH
 
+_dirpath = os.path.abspath('.')
 
 def _importObj():
-    with open('/home/jason/Py/Expenses/config.json') as jfile:
+    fpath = os.path.join(_dirpath, 'config.json')
+    with open(fpath) as jfile:
         return json.load(jfile)
 
 def _exportObj():
-    with open('/home/jason/Py/Expenses/config.json', 'w') as jfile:
+    fpath = os.path.join(_dirpath, 'config.json')
+    with open(fpath, 'w') as jfile:
         json.dump(self.obj, jfile, indent = 4)
 
 
@@ -21,7 +24,7 @@ class ConfiMeta(type):
         try:
             dict['obj'] = _importObj()
         except IOError:
-            EH.ioerror(
+            EH.ioError(
                 "file ./confi.json not exist, can't initialise program."
             )
         return super(cls, ConfiMeta).__new__(cls, name, bases, dict)

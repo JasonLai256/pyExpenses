@@ -63,9 +63,12 @@ class RecManip(object):
 
 if __name__ == '__main__':
     starttime = time.time()
+
+    from os.path import join, abspath
+    dirpath = abspath('.')
     
     rm = RecManip()
-    rm.importRecord('/home/jason/Py/Expenses/example.dat')
+#    rm.importRecord(join(dirpath, example.dat))
 #    rm.save()
     
     print '\n', '=' * 40, '\n'
@@ -114,8 +117,7 @@ if __name__ == '__main__':
 
 
     print '\n', 30 * '-', '\n'
-#    rm.test()
-    rm.exportRecord('/home/jason/Py/Expenses/example_export.dat')
+    rm.exportRecord(join(dirpath, 'example_export.dat'))
     print "Amount Sum = {0}, Items Sum = {1}\n" \
         "Max Item Date = {2}, Max Items = {3}\n" \
         "Max Amount Date = {4}, Max Amount = {5}".format(rm.impl.sum_amounts,
@@ -126,12 +128,11 @@ if __name__ == '__main__':
                                                          rm.impl.max_amount)
     rm.clear()
     print '\n', 30 * '-', '\n'
-#    rm.test()
 
 
     print '\n', 30 * '-', '\n'
     rm2 = RecManip()
-    rm2.importRecord('/home/jason/Py/Expenses/example_export.dat')
+    rm2.importRecord(join(dirpath, 'example_export.dat'))
     
     print '\n', '=' * 40, '\n'
     print rm.impl.isExistence(date(2011, 1, 1))
@@ -151,7 +152,7 @@ if __name__ == '__main__':
     rm.addItem(date(2012, 5, 1), tem)
     tem = BaseRecord('4', 3)
     rm.addItem(date(2013, 5, 1), tem)
-    rm.exportRecord('/home/jason/Py/Expenses/example_export2.dat')
+    rm.exportRecord(join(dirpath, 'example_export2.dat'))
     
     
 

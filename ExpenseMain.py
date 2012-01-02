@@ -56,8 +56,12 @@ class Expense(object):
 if __name__ == '__main__':
     starttime = time.time()
 
+    from os.path import join, abspath
+
     exp = Expense()
-#    exp.importData('/home/jason/Py/Expenses/example.dat')
+    
+    exampath = join(abspath('.'), 'example.dat')
+#    exp.importData(exampath)
     
     parsers = []
     parsers.append(RP.Amount_Stat())
