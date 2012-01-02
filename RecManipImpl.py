@@ -1,33 +1,22 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
 
-"""
-The format of seq -- data structure -- of RecorManip class:
-
-_reclist[conta1, conta2, conta3, ... , contaN]  # list
-         --+---
-           |
-           +--> _RecContainer(date, storage)  # class
-                                    ---+---
-                                       |
-               +-----------------------+
-               |
-               +--> _storage[baserec1, baserec2, ... , baserecN]  # deque
-                             ---+----
-                                |
-                   +------------+
-                   |
-                   +--> BaseRecord(att1, att2, ... , attN)  # class
-"""
-
 import time
 import sys
 import os
+import hashlib
+try:
+    import cPickle as Pickle
+except:
+    import Pickle
 from datetime import date, timedelta
 from decimal import Decimal
 from collections import deque
 
 import ErrorHandle as EH
+
+class PwdError(Exception):
+    pass
 
 class BaseRecord(object):
     """Basic structure of single item use to store record.
@@ -67,8 +56,9 @@ class BaseRecord(object):
         self.csm_catag = newrec.csm_catag
         self.comment = newrec.comment
 
-
+        
 class _RecContainer(object):
+    """Data container class inner defined."""
     def __init__(self, time):
         self._date = time
         self._storage = deque()
@@ -82,8 +72,8 @@ class _RecContainer(object):
             if elem == base_rec:
                 self._storage.remove(elem)
                 return
-        else:
-            EH.valueError('data is not in Record Manipulator.')
+            else:
+                EH.valueError('data is not in Record Manipulator.')
 
     def updateElem(self, base_rec, new_rec):
         """update the specified element whth new_rec."""
@@ -91,22 +81,36 @@ class _RecContainer(object):
             if elem == base_rec:
                 elem.copy(new_rec)
                 return
-        else:
-            EH.valueError('data is not in Record Manipulator.')
-
+            else:
+                EH.valueError('data is not in Record Manipulator.')
 
 class PickleImpl(object):
     """Record manipulator that offer some basic operations to mapulate data,
     like access,modify,retrieve etc.
-    """
-    # testing control notation
-    _test = False
-    
-    def __init__(self):
-        self._reclist = []
-        # Note: _len is the amount of elements in _reclist.
-        self._len = 0
 
+    @Note: The format of seq -- data structure -- of PickleImpl class:
+
+    _reclist[conta1, conta2, conta3, ... , contaN]  # list
+             --+---
+               |
+               +--> _RecContainer(date, storage)  # class
+                                        ---+---
+                                           |
+                  +------------------------+
+                  |
+                  +--> _storage[baserec1, baserec2, ... , baserecN]  # deque
+                                ---+----
+                                   |
+                      +------------+
+                      |
+                      +--> BaseRecord(att1, att2, ... , attN)  # class
+
+    """
+    
+    
+    def __init__(self, pwd='<!--#/**/;;//PyExpense-->'):
+        self._load(pwd)
+        
         # following attributes is the info of records:
         self.sum_amounts = 0.0
         self.sum_items = 0
@@ -117,10 +121,11 @@ class PickleImpl(object):
         self.max_amount = 0.0
         self.max_amount_date = ''
 
+#    def __del__(self):
+#        self._dump()
+
     def addItem(self, time, base_rec):
         """add a basic record to storage."""
-        if PickleImpl._test:
-            print "\tfunction: addItem"
         if not self.isExistence(time):
             item = _RecContainer(time)
             index = self._index(time)
@@ -134,8 +139,6 @@ class PickleImpl(object):
         """delete a specified record.
         @note: if date not exist,raise a exception.
         """
-        if PickleImpl._test:
-            print "\tfunction: delItem"
         if not self.isExistence(date):
             EH.valueError('{0} is not in Record Manipulator.'.format(date))
         
@@ -147,8 +150,6 @@ class PickleImpl(object):
             del self._reclist[index]
 
     def updateItem(self, date, base_rec, new_rec):
-        if PickleImpl._test:
-            print "\tfunction: updateItem"
         if not self.isExistence(date):
             EH.valueError('{0} is not in Record Manipulator.'.format(date))
 
@@ -167,47 +168,20 @@ class PickleImpl(object):
         """Return a range of records in specified period.
         @note: 
         """
-        if PickleImpl._test:
-            print "\tfunction: record_range"
         if begin > end:
             EH.indexError(
-                'Begin time greater {0} than end time {1}'.format(begin, end)
+                'Begin time {0} greater than end time {1}'.format(begin, end)
             )
-        begin_ind = self._index(begin)
-        end_ind = self._index(end)
+        bindex = self._index(begin)
+        eindex = self._index(end)
 
         ret = {}
-        for elem in self._reclist[begin_ind:end_ind]:
+        for elem in self._reclist[bindex:eindex]:
             ret[elem._date] = elem._storage
-        return ret
-
-    def findDate(self, date):
-        """find and return the matching record. 
-        @note: if date not exist,raise a exception.
-        """
-        if PickleImpl._test:
-            print "\tfunction: findDate"
-        if not self.isExistence(date):
-            EH.valueError('{0} is not in Record Manipulator.'.format(date))
-        
-        index = self._index(date)
-#        print 'index = ', index
-        return date, self._reclist[index]._storage
-        
-    def findDates(self, date, nth):
-        """ """
-        if PickleImpl._test:
-            print "\tfunction: findDates"
-        index = self._index(date)
-        ret = deque()
-        for elem in self._reclist[index:index + nth]:
-            ret.append( (elem._date, elem._storage) )
         return ret
 
     def clear(self):
         """clear all the data in data manipulator."""
-        if PickleImpl._test:
-            print "\tfunction: clear"
         for elem in self._reclist[:]:
             for ite in xrange(len(elem._storage)):
                 del elem._storage[0]
@@ -217,12 +191,13 @@ class PickleImpl(object):
             del self._reclist[0]
         self._len = 0
 
+    def save(self):
+        self._dump()
+        
     def importRecord(self, filename):
         """import a backup from specify file, note that it will override
         original data."""
-        if PickleImpl._test:
-            print "\tfunction: importRecord"
-        self.clear()
+        self.clear()  # NOTE: maybe should make this operation decide in upper level.
         file = open(filename)
         for line in file.readlines():
             dat = line.split(':')
@@ -238,8 +213,6 @@ class PickleImpl(object):
     def exportRecord(self, filename):
         """Export textual data records into the specified file.
         """
-        if PickleImpl._test:
-            print "\tfunction: exportRecord"
         file = open(filename, 'w')
         outlist = []
         for elem in self._reclist:
@@ -258,10 +231,40 @@ class PickleImpl(object):
             file.writelines(outlist)
             file.close()
 
+    def _dump(self):
+        picfile = open('/home/jason/Py/Expenses/records.dat', 'wb')
+        Pickle.dump(self._reclist, picfile, 2)
+        Pickle.dump(self._pwd, picfile, 2)
+        Pickle.dump(self._len, picfile, 2)
+        picfile.close()
+
+    def _load(self, pwd):
+        fname = '/home/jason/Py/Expenses/records.dat'
+        isfile = os.path.isfile(fname)
+        if not isfile or not os.path.getsize(fname):
+            self._reclist = []
+            m = hashlib.sha256()
+            # There is a default common pwd digest.
+            m.update('<!--#/**/;;//PyExpense-->')
+            self._pwd = m.digest()
+            self._len = 0
+            if not isfile:
+                # need to create a new store file of data
+                self._dump()
+        else:
+            picfile = open(fname)
+            self._reclist = Pickle.load(picfile)
+            self._pwd = Pickle.load(picfile)
+            self._len = Pickle.load(picfile)
+            picfile.close()
+        
+        m = hashlib.sha256()
+        m.update(pwd)
+        if m.digest() != self._pwd:
+            raise PwdError
+
     def isExistence(self, dateitem):
         """Judge whether the item exist or not."""
-        if PickleImpl._test:
-            print "\tfunction: isExistence"
         low = 0
         high = self._len - 1
         while True:
@@ -281,8 +284,6 @@ class PickleImpl(object):
                 sys.exit(1)
 
     def _index(self, date):
-        if PickleImpl._test:
-            print "\tfunction: _index"
         low = 0
         high = self._len - 1
         while True:
@@ -310,12 +311,5 @@ class PickleImpl(object):
         self.sum_items += (baserec.amount - newrec.amount)
                 
     def _insert(self, date, record):
-        if PickleImpl._test:
-            print "\tfunction: _insert"
         i = self._index(date)
         self._reclist[i].addContent(record)
-
-    def test(self):
-        for item in self._reclist:
-            print item._date, '\tlenght is ', len(item._storage)
-        print 'lenght = ', self._len

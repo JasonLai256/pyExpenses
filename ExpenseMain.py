@@ -6,10 +6,6 @@ import sys
 import time
 from decimal import Decimal
 from datetime import date
-try:
-    import cPickle as Pickle
-except:
-    import Pickle
 
 import RecManip
 from ConfigManip import Config
@@ -26,24 +22,10 @@ def datecheck(date):
 
 class Expense(object):
     def __init__(self):
-        self.rec_m = self.rec_unpickling()    # Records Manipulator
+        self.rec_m = RecManip.RecManip()    # Records Manipulator
         self.projects = []
 
-    def rec_pickling(self):
-        file = open('/home/jason/Py/Expenses/records.dat', 'wb')
-        Pickle.dump(self.rec_m, file, 2)
-
-    def rec_unpickling(self):
-        fname = '/home/jason/Py/Expenses/records.dat'
-        if not os.path.getsize(fname):
-            return RecManip.RecManip()
-        else:
-            picfile = open(fname)
-            return Pickle.load(picfile)
-
     def addItem(self, time, baserec):
-        if not datecheck(time):
-            EH.valueError('time is not valid iso format.')
         self.rec_m.addItem(time, baserec)
         Config.setDefaultType(baserec)
 
@@ -118,7 +100,6 @@ if __name__ == '__main__':
 
 #    ad = exp.allData()
     
-#    exp.rec_pickling()
 #    exp.exportData('/home/jason/Py/Expenses/example_export.dat')
 
 

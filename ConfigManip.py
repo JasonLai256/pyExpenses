@@ -8,12 +8,12 @@ import ErrorHandle as EH
 
 
 def _importObj():
-    with open('/home/jason/Py/Expenses/config.json') as fil:
-        return json.load(fil)
+    with open('/home/jason/Py/Expenses/config.json') as jfile:
+        return json.load(jfile)
 
 def _exportObj():
-    with open('/home/jason/Py/Expenses/config.json', 'w') as fil:
-        json.dump(self.obj, fil, indent = 4)
+    with open('/home/jason/Py/Expenses/config.json', 'w') as jfile:
+        json.dump(self.obj, jfile, indent = 4)
 
 
 class ConfiMeta(type):
@@ -113,3 +113,5 @@ if __name__ == '__main__':
     print cm.type2num('PaymentType', '现金')
     print cm.num2type('Tag', '0')
     print cm.type2num('Tag', '商务')
+    print cm.obj['BaseInfo']['Shadow']
+    print type(cm.obj['BaseInfo']['Shadow'])

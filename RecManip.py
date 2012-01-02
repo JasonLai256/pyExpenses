@@ -49,6 +49,10 @@ class RecManip(object):
         """clear all the data in data manipulator."""
         self.impl.clear()
 
+    def save(self):
+        """save all the data in data manipulator to permanent storage."""
+        self.impl.save()
+
     def importRecord(self, filename):
         self.impl.importRecord(filename)
 
@@ -62,6 +66,7 @@ if __name__ == '__main__':
     
     rm = RecManip()
     rm.importRecord('/home/jason/Py/Expenses/example.dat')
+#    rm.save()
     
     print '\n', '=' * 40, '\n'
     print rm.impl.isExistence(date(2011, 1, 1))

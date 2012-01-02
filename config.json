@@ -28,6 +28,7 @@
         "currency": "\uffe5", 
         "version": "0.0.2", 
         "language": "cn", 
-        "path": "/home/jason/Py/Expenses/"
+        "path": "/home/jason/Py/Expenses/",
+	"Shadow": false
     }
 }
