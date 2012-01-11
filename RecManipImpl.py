@@ -7,12 +7,13 @@ import os
 import hashlib
 try:
     import cPickle as Pickle
-except:
+except ImportError:
     import Pickle
 from datetime import date, timedelta
 from decimal import Decimal
 from collections import deque
 
+from ConfigManip import Config
 import ErrorHandle as EH
 
 class PwdError(Exception):
@@ -21,40 +22,44 @@ class PwdError(Exception):
 class BaseRecord(object):
     """Basic structure of single item use to store record.
     """
-    def __init__(self, Type, Amount, Paidwith = '0',
-                       Tag = '0', Note = None):
-        self.csm_type = str(Type)    # ConsumingType
+    def __init__(self, Amount, Type, Payment, Currency, Tag='', Note=''):
         self.amount = float(Amount)
-        self.pmt_type = str(Paidwith)    # PaymentType
-        self.csm_catag = str(Tag)
-        self.comment = str(Note)
+        # Note: type structure is a 2-tuple, e.g, (type, subtype)
+        self.type = unicode(Type[0].encode('utf-8'), 'utf-8'), \
+                    unicode(Type[1].encode('utf-8'), 'utf-8')
+        self.payment = unicode(Payment.encode('utf-8'), 'utf-8')
+        self.currency = unicode(Currency.encode('utf-8'), 'utf-8')
+        self.tag = unicode(Tag.encode('utf-8'), 'utf-8')
+        self.comment = unicode(Note.encode('utf-8'), 'utf-8')
 
     def __eq__(self, brec):
-        return self.csm_type == brec.csm_type and \
+        return self.type == brec.type and \
                self.amount == brec.amount and \
-               self.pmt_type == brec.pmt_type and \
-               self.csm_catag == brec.csm_catag and \
+               self.payment == brec.payment and \
+               self.currency == brec.currency and \
+               self.tag == brec.tag and \
                self.comment == brec.comment
 
     def __ne__(self, brec):
         return not self == brec
 
     def getAttr(self, AttrType):
-        if AttrType == "ConsumingType":
-            return self.csm_type
-        elif AttrType == "PaymentType":
-            return self.pmt_type
-        elif AttrType == "ConsumingCatagory":
-            return self.csm_catag
+        if AttrType == "Type":
+            return self.type
+        elif AttrType == "Payment":
+            return self.payment
+        elif AttrType == "Tag":
+            return self.tag
         else:
             raise ValueError
 
-    def copy(self, newrec):
-        self.csm_type = newrec.csm_type
-        self.amount = newrec.amount
-        self.pmt_type = newrec.pmt_type
-        self.csm_catag = newrec.csm_catag
-        self.comment = newrec.comment
+    def copy(self, nrec):
+        self.type = nrec.type
+        self.amount = nrec.amount
+        self.payment = nrec.payment
+        self.currency = nrec.currency
+        self.tag = nrec.tag
+        self.comment = nrec.comment
 
         
 class _RecContainer(object):
@@ -219,10 +224,10 @@ class PickleImpl(object):
             outstr = ''
             for item in elem._storage:
                 outstr += elem._date.isoformat()
-                tem = ':' + item.csm_type + \
+                tem = ':' + item.type + \
                     ':' + str(item.amount) + \
-                    ':' + item.pmt_type + \
-                    ':' + item.csm_catag + \
+                    ':' + item.payment + \
+                    ':' + item.tag + \
                     ':' + item.comment
                 outstr += tem
             else:
@@ -232,7 +237,7 @@ class PickleImpl(object):
             file.close()
 
     def _dump(self):
-        fpath = os.path.join(os.path.abspath('.'), 'records.dat')
+        fpath = os.path.join(Config.getInfo('path'), 'records.dat')
         picfile = open(fpath, 'wb')
         Pickle.dump(self._reclist, picfile, 2)
         Pickle.dump(self._pwd, picfile, 2)
@@ -240,7 +245,7 @@ class PickleImpl(object):
         picfile.close()
 
     def _load(self, pwd):
-        fpath = os.path.join(os.path.abspath('.'), 'records.dat')
+        fpath = os.path.join(Config.getInfo('path'), 'records.dat')
         isfile = os.path.isfile(fpath)
         if not isfile or not os.path.getsize(fpath):
             self._reclist = []

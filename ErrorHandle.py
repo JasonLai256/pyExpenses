@@ -13,3 +13,6 @@ def ioError(estring):
 
 def indexError(estring):
     raise IndexError(estring)
+
+def attrError(estring):
+    raise AttributeError

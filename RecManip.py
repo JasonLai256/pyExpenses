@@ -64,8 +64,8 @@ class RecManip(object):
 if __name__ == '__main__':
     starttime = time.time()
 
-    from os.path import join, abspath
-    dirpath = abspath('.')
+    from os.path import join
+    dirpath = Config.getInfo('path')
     
     rm = RecManip()
 #    rm.importRecord(join(dirpath, example.dat))

@@ -56,11 +56,11 @@ class Expense(object):
 if __name__ == '__main__':
     starttime = time.time()
 
-    from os.path import join, abspath
+    from os.path import join
 
     exp = Expense()
     
-    exampath = join(abspath('.'), 'example.dat')
+    exampath = join(Config.getInfo('path'), 'example.dat')
 #    exp.importData(exampath)
     
     parsers = []
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
 #    ad = exp.allData()
     
-#    exp.exportData('/home/jason/Py/Expenses/example_export.dat')
+#    exp.exportData(join(Config.getInfo('path'), 'example_export.dat'))
 
 
 
