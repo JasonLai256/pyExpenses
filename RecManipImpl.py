@@ -14,6 +14,7 @@ from decimal import Decimal
 from collections import deque
 
 from ConfigManip import Config
+from utils import UnicodeReader, UnicodeWriter
 import ErrorHandle as EH
 
 class PwdError(Exception):
@@ -113,8 +114,12 @@ class PickleImpl(object):
     """
     
     
-    def __init__(self, pwd='<!--#/**/;;//PyExpense-->'):
-        self._load(pwd)
+    def __init__(self, pwd='<!--#/**/;;//PyExpense-->', **kwargs):
+        if kwargs.get('test', False):
+            # use default setting for test
+            self._setdefault()
+        else:
+            self._load(pwd)
         
         # following attributes is the info of records:
         self.sum_amounts = 0.0
@@ -214,6 +219,17 @@ class PickleImpl(object):
             self.addItem(rdate, tem)
         else:
             file.close()
+        
+        # self.clear()  # NOTE: maybe should make this operation decided in upper level.
+        # reader = UnicodeReader(open(filename, 'rb'))
+        # for row in reader:
+        #     y = int(row[0][:4])
+        #     m = int(row[0][5:7])
+        #     d = int(row[0][8:])
+        #     rdate = date(y, m, d)
+        #     rtype = row[2], row[3]
+        #     temprec = BaseRecord(row[1], rtype, row[4], row[5], row[6], row[7])
+        #     self.addItem(rdate, temprec)
 
     def exportRecord(self, filename):
         """Export textual data records into the specified file.
@@ -236,6 +252,23 @@ class PickleImpl(object):
             file.writelines(outlist)
             file.close()
 
+        # writer = UnicodeWriter(open(filename, 'wb'))
+        # outlist = []
+        # for elem in self._reclist:
+        #     rdate = elem._date.isoformat()
+        #     for item in elem._storage:
+        #         outrec = [rdate, 
+        #                   item.amount,
+        #                   item.type[0],
+        #                   item.type[1],
+        #                   item.payment,
+        #                   item.currency,
+        #                   item.tag,
+        #                   item.comment]
+        #         outlist.append(outrec)
+                
+        # writer.writerows(outlist)
+
     def _dump(self):
         fpath = os.path.join(Config.getInfo('path'), 'records.dat')
         picfile = open(fpath, 'wb')
@@ -248,12 +281,7 @@ class PickleImpl(object):
         fpath = os.path.join(Config.getInfo('path'), 'records.dat')
         isfile = os.path.isfile(fpath)
         if not isfile or not os.path.getsize(fpath):
-            self._reclist = []
-            m = hashlib.sha256()
-            # There is a default common pwd digest.
-            m.update('<!--#/**/;;//PyExpense-->')
-            self._pwd = m.digest()
-            self._len = 0
+            self._setdefault()
             if not isfile:
                 # need to create a new store file of data
                 self._dump()
@@ -268,6 +296,14 @@ class PickleImpl(object):
         m.update(pwd)
         if m.digest() != self._pwd:
             raise PwdError
+
+    def _setdefault(self):
+        self._reclist = []
+        m = hashlib.sha256()
+        # There is a default common pwd digest.
+        m.update('<!--#/**/;;//PyExpense-->')
+        self._pwd = m.digest()
+        self._len = 0
 
     def isExistence(self, dateitem):
         """Judge whether the item exist or not."""

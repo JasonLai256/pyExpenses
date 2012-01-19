@@ -8,8 +8,8 @@ from ConfigManip import Config
 
 
 class RecManip(object):
-    def __init__(self):
-        self.impl = PickleImpl()
+    def __init__(self, **kwargs):
+        self.impl = PickleImpl(**kwargs)
 
     def addItem(self, time, base_rec):
         """add a basic record to storage."""
