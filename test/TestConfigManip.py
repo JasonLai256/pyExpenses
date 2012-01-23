@@ -66,7 +66,6 @@ class TestConfigManip(unittest.TestCase):
 
     def test_setDefault(self):
         rec = BaseRecord(1, (u'食品酒水', u'水果零食'), u'现金', u'￥')
-        print type(rec.payment[0])
         Config.setDefault(rec)
 
         self.assertEqual(Config.obj['Type']['default'], rec.type)

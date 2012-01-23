@@ -115,7 +115,7 @@ class PickleImpl(object):
     
     
     def __init__(self, pwd='<!--#/**/;;//PyExpense-->', **kwargs):
-        if kwargs.get('test', False):
+        if kwargs.get('test', False) is True:
             # use default setting for test
             self._setdefault()
         else:
@@ -167,9 +167,10 @@ class PickleImpl(object):
         self._reclist[index].updateElem(base_rec, new_rec)
 
     def getAll(self):
+        oneday = timedelta(1)
         begin_d = self._reclist[0]._date
-        end_d = self._reclist[-1]._date
-        return self.record_range(begin_d, end_d)
+        end_d = self._reclist[-1]._date + oneday
+        return self.date_range(begin_d, end_d)
 
     def getInfo(self):
         pass
@@ -207,67 +208,36 @@ class PickleImpl(object):
     def importRecord(self, filename):
         """import a backup from specify file, note that it will override
         original data."""
-        self.clear()  # NOTE: maybe should make this operation decide in upper level.
-        file = open(filename)
-        for line in file.readlines():
-            dat = line.split(':')
-            y = int(dat[0][:4])
-            m = int(dat[0][5:7])
-            d = int(dat[0][8:])
+        self.clear()  # NOTE: maybe should make this operation decided in upper level.
+        reader = UnicodeReader(open(filename, 'rb'))
+        for row in reader:
+            y = int(row[0][:4])
+            m = int(row[0][5:7])
+            d = int(row[0][8:])
             rdate = date(y, m, d)
-            tem = BaseRecord(dat[1], dat[2], dat[3], dat[4], dat[5])
-            self.addItem(rdate, tem)
-        else:
-            file.close()
-        
-        # self.clear()  # NOTE: maybe should make this operation decided in upper level.
-        # reader = UnicodeReader(open(filename, 'rb'))
-        # for row in reader:
-        #     y = int(row[0][:4])
-        #     m = int(row[0][5:7])
-        #     d = int(row[0][8:])
-        #     rdate = date(y, m, d)
-        #     rtype = row[2], row[3]
-        #     temprec = BaseRecord(row[1], rtype, row[4], row[5], row[6], row[7])
-        #     self.addItem(rdate, temprec)
+            rtype = row[2], row[3]
+            temprec = BaseRecord(row[1], rtype, row[4], row[5], row[6], row[7])
+            self.addItem(rdate, temprec)
 
     def exportRecord(self, filename):
         """Export textual data records into the specified file.
         """
-        file = open(filename, 'w')
+        writer = UnicodeWriter(open(filename, 'wb'))
         outlist = []
         for elem in self._reclist:
-            outstr = ''
+            rdate = elem._date.isoformat()
             for item in elem._storage:
-                outstr += elem._date.isoformat()
-                tem = ':' + item.type + \
-                    ':' + str(item.amount) + \
-                    ':' + item.payment + \
-                    ':' + item.tag + \
-                    ':' + item.comment
-                outstr += tem
-            else:
-                outlist.append(outstr)
-        else:
-            file.writelines(outlist)
-            file.close()
-
-        # writer = UnicodeWriter(open(filename, 'wb'))
-        # outlist = []
-        # for elem in self._reclist:
-        #     rdate = elem._date.isoformat()
-        #     for item in elem._storage:
-        #         outrec = [rdate, 
-        #                   item.amount,
-        #                   item.type[0],
-        #                   item.type[1],
-        #                   item.payment,
-        #                   item.currency,
-        #                   item.tag,
-        #                   item.comment]
-        #         outlist.append(outrec)
+                outrec = [rdate, 
+                          str(item.amount).encode('utf-8'),
+                          item.type[0],
+                          item.type[1],
+                          item.payment,
+                          item.currency,
+                          item.tag,
+                          item.comment]
+                outlist.append(outrec)
                 
-        # writer.writerows(outlist)
+        writer.writerows(outlist)
 
     def _dump(self):
         fpath = os.path.join(Config.getInfo('path'), 'records.dat')
