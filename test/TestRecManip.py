@@ -122,6 +122,7 @@ class TestRecManip(unittest.TestCase):
         )
 
     def test_getInfo(self):
+        # TODO: need to complete the implementation of RecManip.getInfo()
         pass
 
     def test_date_range(self):
@@ -146,10 +147,12 @@ class TestRecManip(unittest.TestCase):
         )
 
     def test_findDates(self):
-        rdate = date(2021, 1, 8)
+        rdate = date(2012, 1, 8)
         res = self.rmanip.findDates(rdate, 5)
         self.assertEqual(len(res), 4)
-        self.assertIsNone(res.get(rdate, None))
+        self.assertIsNone(
+            res.get(date(2012, 1, 13), None)
+        )
         self.assertEqual(
             sum(rec.amount for keydate in res
                                for rec in res[keydate]),

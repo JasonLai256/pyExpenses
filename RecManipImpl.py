@@ -78,8 +78,8 @@ class _RecContainer(object):
             if elem == base_rec:
                 self._storage.remove(elem)
                 return
-            else:
-                EH.valueError('data is not in Record Manipulator.')
+        else:
+            EH.valueError('data is not in Record Manipulator.')
 
     def updateElem(self, base_rec, new_rec):
         """update the specified element whth new_rec."""
@@ -131,8 +131,8 @@ class PickleImpl(object):
         self.max_amount = 0.0
         self.max_amount_date = ''
 
-#    def __del__(self):
-#        self._dump()
+   # def __del__(self):
+   #     self._dump()
 
     def addItem(self, time, base_rec):
         """add a basic record to storage."""
@@ -167,10 +167,10 @@ class PickleImpl(object):
         self._reclist[index].updateElem(base_rec, new_rec)
 
     def getAll(self):
-        oneday = timedelta(1)
-        begin_d = self._reclist[0]._date
-        end_d = self._reclist[-1]._date + oneday
-        return self.date_range(begin_d, end_d)
+        ret = {}
+        for elem in self._reclist:
+            ret[elem._date] = elem._storage
+        return ret
 
     def getInfo(self):
         pass
@@ -206,8 +206,8 @@ class PickleImpl(object):
         self._dump()
         
     def importRecord(self, filename):
-        """import a backup from specify file, note that it will override
-        original data."""
+        """import a backup file that was implemented by CSV format from 
+        specify file, note that it will override original data."""
         self.clear()  # NOTE: maybe should make this operation decided in upper level.
         reader = UnicodeReader(open(filename, 'rb'))
         for row in reader:
@@ -220,7 +220,8 @@ class PickleImpl(object):
             self.addItem(rdate, temprec)
 
     def exportRecord(self, filename):
-        """Export textual data records into the specified file.
+        """Export textual data records that is implemented by CSV format
+        into the specified file.
         """
         writer = UnicodeWriter(open(filename, 'wb'))
         outlist = []
