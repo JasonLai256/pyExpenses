@@ -7,11 +7,12 @@ import os
 from datetime import date
 
 try:
-    from RecParser import RecParser as RP
+    import RecParser as RP
 except ImportError:
     sys.path.append(os.path.abspath('..'))
-    from RecParser import RecParser as RP
+    import RecParser as RP
 from RecManipImpl import BaseRecord
+from RecManip import RecManip
 from TestRecManip import TEST_SAMPS
 
 
@@ -39,9 +40,40 @@ class TestRecParser(unittest.TestCase):
 
     def test_Type_Filter(self):
         parser = RP.MainParser(self.dataflow)
-        parser.append(RP.)
+        parser.append(RP.Type_Filter((u'食品酒水', u'早午晚餐'), 'type'))
+        dummy1, dummy2, fseq = parser.parse()
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            227.0
+        )
 
-        # TODO: need to be done.
+        parser = RP.MainParser(self.dataflow)
+        parser.append(RP.Type_Filter(u'学习进修', 'type'))
+        dummy1, dummy2, fseq = parser.parse()
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            1919.0
+        )
+
+        parser = RP.MainParser(self.dataflow)
+        parser.append(RP.Type_Filter(u'信用卡', 'payment'))
+        dummy1, dummy2, fseq = parser.parse()
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            1969.0
+        )
+
+        parser = RP.MainParser(self.dataflow)
+        parser.append(RP.Type_Filter(u'赞', 'tag'))
+        dummy1, dummy2, fseq = parser.parse()
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            154.0
+        )
 
     def test_Money_Filter(self):
         # TODO: modify Money_Filter range that is [start, stop)
@@ -106,11 +138,25 @@ class TestRecParser(unittest.TestCase):
         parser = RP.MainParser(self.dataflow)
         parser.append(RP.General_Analys())
         analyres, dummy1, dummy2 = parser.parse()
-        # TODO: need to be modify that suit to the BaseRecord new features
-        
-        # self.assertEqual(analyres[0][1], 21)
-        # self.assertEqual(analyres[0][1], 21)
-        # self.assertEqual(analyres[0][1], 21)
+
+        rdict = {}
+        for key, amount, percent in analyres[0][1]:
+            rdict[key] = amount
+        self.assertEqual(
+            rdict[u'食品酒水'], 322.0
+        )
+        self.assertEqual(
+            rdict[u'学习进修'], 1919.0
+        )
+        self.assertEqual(
+            rdict[u'行车交通'], 16.0
+        )
+        self.assertEqual(
+            rdict[u'医疗保健'], 13.0
+        )
+        self.assertEqual(
+            rdict[u'休闲娱乐'], 50.0
+        )
 
         
 if __name__ == '__main__':

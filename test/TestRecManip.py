@@ -122,7 +122,7 @@ class TestRecManip(unittest.TestCase):
         )
 
     def test_getInfo(self):
-        # TODO: need to complete the implementation of RecManip.getInfo()
+        # TODO: need to complete the implementation of RecManip.getInfo() priorly.
         pass
 
     def test_date_range(self):
