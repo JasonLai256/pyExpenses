@@ -44,16 +44,6 @@ class BaseRecord(object):
     def __ne__(self, brec):
         return not self == brec
 
-    def getAttr(self, AttrType):
-        if AttrType == "Type":
-            return self.type
-        elif AttrType == "Payment":
-            return self.payment
-        elif AttrType == "Tag":
-            return self.tag
-        else:
-            raise ValueError
-
     def copy(self, nrec):
         self.type = nrec.type
         self.amount = nrec.amount

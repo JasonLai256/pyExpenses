@@ -137,20 +137,39 @@ class Count_Stat(Parser):
     
 class Type_Filter(Parser):
     """用于extract指定Type的Recores数据。"""
-    def __init__(self, Optcode, AttrType = 'ConsumingType'):
-        self.optcode = str(Optcode)
-        self.attr = AttrType
+    def __init__(self, Optcode, AttrType='type'):
+        self.optcode = Optcode
+        self.atype = AttrType
+        self._test()
         super(Type_Filter, self).__init__('filter')
 
     def parse(self, recgroup):
+        if self.atype is 'type' and not isinstance(self.optcode, tuple):
+            # BaseRecord.type is constructed to (maintype, subtype), is a
+            # 2-tuple, this situation is just filter maintype of type.
+            return self._type_filter(recgroup, ismaintype=True)
+        else:
+            return self._type_filter(recgroup)
+
+    def _type_filter(self, recgroup, ismaintype=False):
         retval = {}
         for kdate, records in recgroup.items():
             for record in records:
-                if record.getAttr(self.attr) == self.optcode:
+                rtype = self._gettype(record, ismaintype)
+                if rtype == self.optcode:
                     if not retval.has_key(kdate):
                         retval[kdate] = []
                     retval[kdate].append(record)
         return retval
+
+    def _gettype(self, record, isMaintype):
+        if isMaintype:
+            return getattr(record, 'type')[0]
+        else:
+            return getattr(record, self.atype, None)
+
+    def _test(self):
+        pass
 
 
 class Money_Filter(Parser):
@@ -170,7 +189,7 @@ class Money_Filter(Parser):
         retval = {}
         for kdate, records in recgroup.items():
             for record in records:
-                if self.start <= record.amount <= self.stop:
+                if self.start <= record.amount < self.stop:
                     if not retval.has_key(kdate):
                         retval[kdate] = []
                     retval[kdate].append(record)
@@ -272,7 +291,7 @@ class General_Analys(Parser):
     percentage of those amount.
 
     @note: the format of return values is:
-                item (csm_type, amount, percentage)
+                item (type, amount, percentage)
     """
     def __init__(self):
         super(General_Analys, self).__init__('analysis')
@@ -281,10 +300,13 @@ class General_Analys(Parser):
         valdict = {}
         for kdate, records in recgroup.items():
             for record in records:
-                if not valdict.has_key(record.csm_type):
-                    valdict[record.csm_type] = [0.0, None]
+                # this parser just analysis the maintype of BaseRecord.type
+                # so that use record.type[0] to be the key of dict followed.
+                key = record.type[0]
+                if not valdict.has_key(key):
+                    valdict[key] = [0.0, None]
 
-                valdict[record.csm_type][0] += record.amount
+                valdict[key][0] += record.amount
 
         asum = sum(item[0] for item in valdict.values())
         self._figure_percentage(valdict, asum)
