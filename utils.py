@@ -4,6 +4,22 @@
 import csv
 import cStringIO
 import codecs
+from datetime import date
+
+import ErrorHandle as EH
+
+
+def to_date(da):
+    """假设da的格式为'yyyy-mm-dd'."""
+    if isinstance(da, date):
+        return da
+    elif isinstance(da, (str, unicode)):
+        y = int(da[:4])
+        m = int(da[5:7])
+        d = int(da[8:])
+        return date(y, m, d)
+    else:
+        EH.valueError('date ({0}) format error.'.format(str(da)))
 
 
 class UTF8Recoder:

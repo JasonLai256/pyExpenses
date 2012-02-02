@@ -4,7 +4,6 @@
 from datetime import date, timedelta
 
 from RecManipImpl import *
-from ConfigManip import Config
 
 
 class RecManip(object):

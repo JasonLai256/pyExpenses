@@ -329,3 +329,83 @@ class General_Analys(Parser):
                     valdict[key][1])
             retlist.append(elem)
         return retlist
+
+
+# ============================================================
+# ** following is parsing functions for Expense's Project.
+# 
+# ============================================================
+PROJECT_TARGET = 'The amount of project target is {0}.'
+PROJECT_START_DATE = 'The project was start at {0}.'
+REST_OF_GOAL = 'For accomplish project target, remain {0}.'
+AVERAGE_OF_REC = 'The average of each amount of registering record is {0}.'
+PAST_DATES = 'From project start, had {0} days was past.'
+REMAIN_DATES = 'To project end, had {0} days is remain.'
+HAS_ACCOMPLISH = 'The project was accomplished at {0}.'
+
+HAS_QUARTER = 'The quarter target amount of project had satified at {0}.'
+HAS_HALF = 'The half target amount of project had satified at {0}.'
+HAS_THREEQUARTERS = 'The three-quarter target amount of project had satified at {0}.'
+IS_RECURSION = 'Project recursion is enable, recursive period is {0} days.'
+
+    
+def consumingProjectParse(data):
+    retseq = []
+    statdict = data['p_statdict']
+
+    restOfGoal = data['p_target_amount'] - data['p_accumt_amount']
+    averageOfRec = data['p_accumt_amount'] / data['p_recs_amount']
+    pastDates = (date.today() - data['p_start_time']).days
+    remainDates = data['p_period'].days - pastDates
+
+    # figure out the basic infomation of project.
+    templist = [
+        PROJECT_TARGET.format(data['p_target_amount']),
+        PROJECT_START_DATE.format(data['p_start_time']),
+        REST_OF_GOAL.format(restOfGoal),
+        AVERAGE_OF_REC.format(averageOfRec),
+        PAST_DATES.format(pastDates),
+        REMAIN_DATES.format(remainDates)
+    ]
+    retseq.extend(templist)
+
+    # figure out the milestone of project target.
+    _date_milestone_check(
+        data['p_start_time'], data['p_period'], statdict
+    )
+    if data['p_accomplish_date']:
+        retseq.append(
+            HAS_ACCOMPLISH.format(data['p_accomplish_date'])
+        )
+    elif statdict['hasThreeQuarters']:
+        retseq.append(
+            HAS_THREEQUARTERS.format(statdict['DateOfThreeQuarters'])
+        )
+    elif statdict['hasHalf']:
+        retseq.append(
+            HAS_HALF.format(statdict['DateOfHalf'])
+        )
+    elif statdict['hasQuarter']:
+        retseq.append(
+            HAS_QUARTER.format(statdict['DateOfQuarter'])
+        )
+
+    # if project recursion is enable.
+    if data['p_recursion']:
+        retseq.append(
+            IS_RECURSION.format(statdict[''])
+        )
+
+    return retseq
+
+def _date_milestone_check(bdate, period, statdict):
+    today = date.today()
+    if not statdict['hasQuarter']:
+        if today >= (bdate + period / 4):
+            statdict['hasQuarter'] = True
+    elif not statdict['hasHalf']:
+        if today >= (bdate + period / 2):
+            statdict['hasHalf'] = True
+    elif not statdict['hasThreeQuarters']:
+        if today >= (bdate + period * 3 / 4):
+            statdict['hasThreeQuarters'] = True

@@ -14,10 +14,12 @@ from decimal import Decimal
 from collections import deque
 
 from ConfigManip import Config
-from utils import UnicodeReader, UnicodeWriter
+from utils import UnicodeReader, UnicodeWriter, to_date
 import ErrorHandle as EH
 
+
 class PwdError(Exception):
+    # TODO: maybe need to complete some features.
     pass
 
 class BaseRecord(object):
@@ -201,10 +203,7 @@ class PickleImpl(object):
         self.clear()  # NOTE: maybe should make this operation decided in upper level.
         reader = UnicodeReader(open(filename, 'rb'))
         for row in reader:
-            y = int(row[0][:4])
-            m = int(row[0][5:7])
-            d = int(row[0][8:])
-            rdate = date(y, m, d)
+            rdate = to_date(row[0])
             rtype = row[2], row[3]
             temprec = BaseRecord(row[1], rtype, row[4], row[5], row[6], row[7])
             self.addItem(rdate, temprec)

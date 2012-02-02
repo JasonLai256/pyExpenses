@@ -11,6 +11,7 @@ _dirpath = [
     os.path.abspath('..')
 ]
 
+# TODO: should provide anathor json file to storage projects data.
 def _importObj():
     fpaths = []
     for path in _dirpath:
@@ -50,7 +51,9 @@ def _addTypeOpt(obj, mtype, subtype):
         if subtype not in obj['Type']['types'][mtype]:
             obj['Type']['types'][mtype].append(subtype)
     else:
-        # Note: before assignment subtype should first convert to a list
+        # Note: before assignment subtype should convert to a list firstly.
+        # Also note that subtype could't use list() to init because subtype
+        # is a str or unicode object.
         obj['Type']['types'][mtype] = [subtype]
 
 def _delTypeOpt(obj, mtype, subtype):
