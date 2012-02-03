@@ -9,6 +9,12 @@ from datetime import date
 import ErrorHandle as EH
 
 
+def datecheck(date):
+    """检查date的格式是否符合ISO格式 'yyyy-mm-dd' """
+    if date[4] == '-' and date[7] == '-':
+        return True
+    return False
+
 def to_date(da):
     """假设da的格式为'yyyy-mm-dd'."""
     if isinstance(da, date):
