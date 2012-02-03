@@ -11,18 +11,21 @@ _dirpath = [
     os.path.abspath('..')
 ]
 
-# TODO: should provide anathor json file to storage projects data.
 def _importObj(filename):
     fpaths = []
     for path in _dirpath:
         fpaths.append(os.path.join(path, filename))
     # iteratively try to open path that whether can find the config file
     for path in fpaths:
-        try:
-            jfile = open(path)
-        except IOError:
+        if not os.path.isfile(path):
             continue
-        return json.load(jfile)
+        if not os.path.getsize(path):
+            # the size of file is zero that contain nothing
+            with open(path, 'w') as tempfile:
+                print '\n** ', path, '\n'
+                json.dump(dict(), tempfile)   # create a empty json dict
+
+        return json.load(open(path))
     else:
         # can't find the config file
         raise IOError
@@ -68,7 +71,10 @@ class ConfiMeta(type):
     def __new__(cls, name, bases, dict):
         try:
             dict['objfile'] = 'config.json'
+            dict['buffile'] = 'projectbuf.json'
             dict['obj'] = _importObj(filename=dict['objfile'])
+            # a storing object that contain the data of project's buffer by json
+            dict['bufobj'] = _importObj(filename=dict['buffile'])
         except IOError:
             EH.ioError(
                 "file ./confi.json not exist, can't initialise program."
@@ -177,3 +183,12 @@ class Config(object):
             cls.obj['Tag']['default'], cls.obj['Tag']['types']
         )
         _exportObj(cls.obj, cls.objfile)
+
+    @classmethod
+    def getBufferObj(cls):
+        return cls.bufobj
+
+    @classmethod
+    def setBufferObj(cls, bufobj):
+        cls.bufobj = bufobj
+        _exportObj(cls.bufobj, cls.buffile)

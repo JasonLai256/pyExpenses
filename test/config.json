@@ -2,7 +2,7 @@
     "BaseInfo": {
         "Shadow": false, 
         "language": "cn", 
-        "path": "/home/jason/Py/Expenses/test", 
+        "path": "/home/jason/expenses/test", 
         "version": "0.0.2"
     }, 
     "Currency": {

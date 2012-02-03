@@ -79,6 +79,18 @@ class TestConfigManip(unittest.TestCase):
         self.assertEqual(Config.obj['Currency']['types'][0], rec.currency)
         self.assertEqual(Config.obj['Tag']['types'][0], rec.tag)
 
+    def test_getBufferObj_and_setBufferObj(self):
+        tempobj = {
+            'python': 6,
+            'tcl': 3,
+            'ruby': 4,
+            'lua': 3,
+            'perl': 4,
+        }
+        Config.setBufferObj(tempobj)
+        bufobj = Config.getBufferObj()
+        self.assertDictEqual(bufobj, tempobj)
+
 
 if __name__ == '__main__':
     unittest.main()
