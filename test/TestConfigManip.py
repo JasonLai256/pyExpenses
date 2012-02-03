@@ -7,11 +7,11 @@ import os
 import copy
 
 try:
-    from ConfigManip import Config, _exportObj
+    from pyExpenses.ConfigManip import Config, _exportObj
 except ImportError:
     sys.path.append(os.path.abspath('..'))
-    from ConfigManip import Config, _exportObj
-from RecManipImpl import BaseRecord
+    from pyExpenses.ConfigManip import Config, _exportObj
+from pyExpenses.RecManipImpl import BaseRecord
 
 
 class TestConfigManip(unittest.TestCase):

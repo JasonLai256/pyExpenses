@@ -7,12 +7,12 @@ import os
 from datetime import date
 
 try:
-    import RecParser as RP
+    import pyExpenses.RecParser as RP
 except ImportError:
     sys.path.append(os.path.abspath('..'))
-    import RecParser as RP
-from RecManipImpl import BaseRecord
-from RecManip import RecManip
+    import pyExpenses.RecParser as RP
+from pyExpenses.RecManipImpl import BaseRecord
+from pyExpenses.RecManip import RecManip
 from TestRecManip import TEST_SAMPS
 
 

@@ -7,10 +7,10 @@ import os
 from datetime import date
 
 try:
-    from Projects import ConsumingProject
+    from pyExpenses.Projects import ConsumingProject
 except ImportError:
     sys.path.append(os.path.abspath('..'))
-    from Projects import ConsumingProject
+    from pyExpenses.Projects import ConsumingProject
 from TestRecManip import TEST_SAMPS
 
 

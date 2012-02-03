@@ -7,11 +7,11 @@ import os
 from datetime import date
 
 try:
-    from RecManip import RecManip
+    from pyExpenses.RecManip import RecManip
 except ImportError:
     sys.path.append(os.path.abspath('..'))
-    from RecManip import RecManip
-from RecManipImpl import BaseRecord
+    from pyExpenses.RecManip import RecManip
+from pyExpenses.RecManipImpl import BaseRecord
 
 
 TEST_SAMPS = {
