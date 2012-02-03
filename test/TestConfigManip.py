@@ -20,7 +20,7 @@ class TestConfigManip(unittest.TestCase):
         self.obj = copy.deepcopy(Config.obj)
 
     def tearDown(self):
-        _exportObj(self.obj, path=os.path.abspath('.'))
+        _exportObj(self.obj, Config.objfile, path=os.path.abspath('.'))
 
     def test_getInfos(self):
         item = Config.getInfos('version')

@@ -12,10 +12,10 @@ _dirpath = [
 ]
 
 # TODO: should provide anathor json file to storage projects data.
-def _importObj():
+def _importObj(filename):
     fpaths = []
     for path in _dirpath:
-        fpaths.append(os.path.join(path, 'config.json'))
+        fpaths.append(os.path.join(path, filename))
     # iteratively try to open path that whether can find the config file
     for path in fpaths:
         try:
@@ -27,11 +27,11 @@ def _importObj():
         # can't find the config file
         raise IOError
 
-def _exportObj(obj, path=None):
+def _exportObj(obj, filename, path=None):
     if path:
-        fpath = os.path.join(path, 'config.json')
+        fpath = os.path.join(path, filename)
     else:
-        fpath = os.path.join(Config.getInfos('path'), 'config.json')
+        fpath = os.path.join(Config.getInfos('path'), filename)
     with open(fpath, 'w') as jfile:
         json.dump(obj, jfile, sort_keys=True, indent=4)
 
@@ -67,7 +67,8 @@ def _delTypeOpt(obj, mtype, subtype):
 class ConfiMeta(type):
     def __new__(cls, name, bases, dict):
         try:
-            dict['obj'] = _importObj()
+            dict['objfile'] = 'config.json'
+            dict['obj'] = _importObj(filename=dict['objfile'])
         except IOError:
             EH.ioError(
                 "file ./confi.json not exist, can't initialise program."
@@ -92,7 +93,7 @@ class Config(object):
                 'Expense info has not "{0}" option.'.format(option)
             )
         cls.obj['BaseInfo'][option] = value
-        _exportObj(cls.obj)
+        _exportObj(cls.obj, cls.objfile)
 
 #    @classmethod
 #    def secionts(cls):
@@ -125,7 +126,7 @@ class Config(object):
         else:
             if val not in cls.obj[section]['types']:
                 cls.obj[section]['types'].append(val)
-        _exportObj(cls.obj)
+        _exportObj(cls.obj, cls.objfile)
 
     @classmethod
     def delOption(cls, section, val):
@@ -136,7 +137,7 @@ class Config(object):
         else:
             if val in cls.obj[section]['types']:
                 cls.obj[section]['types'].remove(val)
-        _exportObj(cls.obj)
+        _exportObj(cls.obj, cls.objfile)
 
     @classmethod
     def getDefaults(cls):
@@ -175,4 +176,4 @@ class Config(object):
         cls.obj['Tag']['types'] = _updOrder(
             cls.obj['Tag']['default'], cls.obj['Tag']['types']
         )
-        _exportObj(cls.obj)
+        _exportObj(cls.obj, cls.objfile)
