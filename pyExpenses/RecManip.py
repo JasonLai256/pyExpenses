@@ -13,7 +13,7 @@ class RecManip(object):
         called after create a instance, the passing arguments can control
         defferent options.
         """
-        self.impl = PickleImpl(**kwargs)
+        self.impl = PickleImpl(*args, **kwargs)
 
     def addItem(self, time, base_rec):
         """add a basic record to storage."""

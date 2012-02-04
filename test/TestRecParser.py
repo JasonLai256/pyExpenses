@@ -11,7 +11,7 @@ try:
 except ImportError:
     sys.path.append(os.path.abspath('..'))
     import pyExpenses.RecParser as RP
-from pyExpenses.RecManipImpl import BaseRecord
+from pyExpenses.Record import BaseRecord
 from pyExpenses.RecManip import RecManip
 from TestRecManip import TEST_SAMPS
 
@@ -19,7 +19,8 @@ from TestRecManip import TEST_SAMPS
 class TestRecParser(unittest.TestCase):
 
     def setUp(self):
-        self.rmanip = RecManip(test=True)
+        self.rmanip = RecManip()
+        self.rmanip.setUp(test=True)
         for rdate, recs in TEST_SAMPS.items():
             for rec in recs:
                 self.rmanip.addItem(rdate, rec)

@@ -11,7 +11,7 @@ try:
 except ImportError:
     sys.path.append(os.path.abspath('..'))
     from pyExpenses.ConfigManip import Config, _exportObj
-from pyExpenses.RecManipImpl import BaseRecord
+from pyExpenses.Record import BaseRecord
 
 
 class TestConfigManip(unittest.TestCase):

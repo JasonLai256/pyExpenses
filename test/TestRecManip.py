@@ -11,7 +11,7 @@ try:
 except ImportError:
     sys.path.append(os.path.abspath('..'))
     from pyExpenses.RecManip import RecManip
-from pyExpenses.RecManipImpl import BaseRecord
+from pyExpenses.Record import BaseRecord
 
 
 TEST_SAMPS = {
