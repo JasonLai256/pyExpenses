@@ -20,7 +20,7 @@ class TestConfigManip(unittest.TestCase):
         self.obj = copy.deepcopy(Config.obj)
 
     def tearDown(self):
-        _exportObj(self.obj, path=os.path.abspath('.'))
+        _exportObj(self.obj, Config.objfile, path=os.path.abspath('.'))
 
     def test_getInfos(self):
         item = Config.getInfos('version')
@@ -78,6 +78,18 @@ class TestConfigManip(unittest.TestCase):
         self.assertEqual(Config.obj['Payment']['types'][0], rec.payment)
         self.assertEqual(Config.obj['Currency']['types'][0], rec.currency)
         self.assertEqual(Config.obj['Tag']['types'][0], rec.tag)
+
+    def test_getBufferObj_and_setBufferObj(self):
+        tempobj = {
+            'python': 6,
+            'tcl': 3,
+            'ruby': 4,
+            'lua': 3,
+            'perl': 4,
+        }
+        Config.setBufferObj(tempobj)
+        bufobj = Config.getBufferObj()
+        self.assertDictEqual(bufobj, tempobj)
 
 
 if __name__ == '__main__':
