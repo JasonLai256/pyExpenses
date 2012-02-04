@@ -65,7 +65,8 @@ class TestRecManip(unittest.TestCase):
 
     def setUp(self):
         self.path = os.path.abspath('.')
-        self.rmanip = RecManip(test=True)
+        self.rmanip = RecManip()
+        self.rmanip.setUp(test=True)
         for rdate, recs in TEST_SAMPS.items():
             for rec in recs:
                 self.rmanip.addItem(rdate, rec)
@@ -162,7 +163,8 @@ class TestRecManip(unittest.TestCase):
     def test_import_export_Record(self):
         fpath = os.path.join(self.path, 'temp_rec.dat')
         self.rmanip.exportRecord(fpath)
-        new_rmanip = RecManip(test=True)
+        new_rmanip = RecManip()
+        new_rmanip.setUp(test=True)
         new_rmanip.importRecord(fpath)
 
         ores = self.rmanip.getAll()

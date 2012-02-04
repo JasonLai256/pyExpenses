@@ -7,7 +7,12 @@ from RecManipImpl import *
 
 
 class RecManip(object):
-    def __init__(self, **kwargs):
+
+    def setUp(self, *args, **kwargs):
+        """It's the method really initialize the instance. This should be
+        called after create a instance, the passing arguments can control
+        defferent options.
+        """
         self.impl = PickleImpl(**kwargs)
 
     def addItem(self, time, base_rec):
