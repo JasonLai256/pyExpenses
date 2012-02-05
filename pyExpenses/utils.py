@@ -20,10 +20,11 @@ def to_date(da):
     if isinstance(da, date):
         return da
     elif isinstance(da, (str, unicode)):
-        y = int(da[:4])
-        m = int(da[5:7])
-        d = int(da[8:])
-        return date(y, m, d)
+        if datecheck(da):
+            y = int(da[:4])
+            m = int(da[5:7])
+            d = int(da[8:])
+            return date(y, m, d)
     else:
         EH.valueError('date ({0}) format error.'.format(str(da)))
 

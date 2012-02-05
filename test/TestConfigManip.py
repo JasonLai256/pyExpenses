@@ -80,16 +80,32 @@ class TestConfigManip(unittest.TestCase):
         self.assertEqual(Config.obj['Tag']['types'][0], rec.tag)
 
     def test_getBufferObj_and_setBufferObj(self):
-        tempobj = {
+        projbuf = {
             'python': 6,
             'tcl': 3,
             'ruby': 4,
             'lua': 3,
             'perl': 4,
         }
-        Config.setBufferObj(tempobj)
-        bufobj = Config.getBufferObj()
-        self.assertDictEqual(bufobj, tempobj)
+        Config.setProjectBuffer(projbuf)
+        bufobj = Config.getProjectBuffer()
+        self.assertDictEqual(bufobj, projbuf)
+
+        rec = BaseRecord(1, (u'食品酒水', u'水果零食'), u'现金', u'￥')
+        recbuf = [
+            [
+                '2012-01-03',
+                rec.amount,
+                rec.type,
+                rec.payment,
+                rec.currency,
+                rec.tag,
+                rec.comment
+            ]
+        ]
+        Config.setRecordBuffer(recbuf)
+        bufobj = Config.getRecordBuffer()
+        self.assertListEqual(bufobj, recbuf)
 
 
 if __name__ == '__main__':

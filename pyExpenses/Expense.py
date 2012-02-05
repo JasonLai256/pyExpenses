@@ -28,8 +28,9 @@ class Expense(object):
         self.isSetup = True
 
     def addRecord(self, rdate, baserec):
-        self.rec_m.addItem(time, baserec)
-        Config.setDefaultType(baserec)
+        if self.isSetup:
+            self.rec_m.addItem(time, baserec)
+            Config.setDefaultType(baserec)
 
     def deleteRecord(self, rdate, baserec):
         pass

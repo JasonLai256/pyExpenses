@@ -71,9 +71,10 @@ class ConfiMeta(type):
     def __new__(cls, name, bases, dict):
         try:
             dict['objfile'] = 'config.json'
-            dict['buffile'] = 'projectbuf.json'
+            dict['buffile'] = 'databuf.json'
             dict['obj'] = _importObj(filename=dict['objfile'])
-            # a storing object that contain the data of project's buffer by json
+            # A storing object that contain the datas of project's buffer
+            # and records buffer by json format.
             dict['bufobj'] = _importObj(filename=dict['buffile'])
         except IOError:
             EH.ioError(
@@ -185,10 +186,23 @@ class Config(object):
         _exportObj(cls.obj, cls.objfile)
 
     @classmethod
-    def getBufferObj(cls):
-        return cls.bufobj
+    def getProjectBuffer(cls):
+        if not cls.bufobj.has_key('ProjectBuf'):
+            cls.bufobj['ProjectBuf'] = {}
+        return cls.bufobj['ProjectBuf']
 
     @classmethod
-    def setBufferObj(cls, bufobj):
-        cls.bufobj = bufobj
+    def setProjectBuffer(cls, bufobj):
+        cls.bufobj['ProjectBuf'] = bufobj
+        _exportObj(cls.bufobj, cls.buffile)
+
+    @classmethod
+    def getRecordBuffer(cls):
+        if not cls.bufobj.has_key('RecordBuf'):
+            cls.bufobj['RecordBuf'] = []
+        return cls.bufobj['RecordBuf']
+
+    @classmethod
+    def setRecordBuffer(cls, bufobj):
+        cls.bufobj['RecordBuf'] = bufobj
         _exportObj(cls.bufobj, cls.buffile)
