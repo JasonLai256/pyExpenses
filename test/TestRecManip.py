@@ -161,7 +161,7 @@ class TestRecManip(unittest.TestCase):
         )
     
     def test_import_export_Record(self):
-        fpath = os.path.join(self.path, 'temp_rec.dat')
+        fpath = os.path.join(self.path, 'temp_rec.csv')
         self.rmanip.exportRecord(fpath)
         new_rmanip = RecManip()
         new_rmanip.setUp(test=True)
