@@ -15,18 +15,18 @@ class RecManip(object):
         """
         self.impl = PickleImpl(*args, **kwargs)
 
-    def addItem(self, time, base_rec):
+    def addItem(self, rdate, base_rec):
         """add a basic record to storage."""
-        self.impl.addItem(time, base_rec)
+        self.impl.addItem(rdate, base_rec)
 
-    def delItem(self, date, base_rec):
+    def delItem(self, rdate, base_rec):
         """delete a specified record.
         @NOTE: if date not exist,raise a exception.
         """
-        self.impl.delItem(date, base_rec)
+        self.impl.delItem(rdate, base_rec)
 
-    def updateItem(self, date, base_rec, new_rec):
-        self.impl.updateItem(date, base_rec, new_rec)
+    def updateItem(self, rdate, base_rec, new_rec):
+        self.impl.updateItem(rdate, base_rec, new_rec)
 
     def getAll(self):
         return self.impl.getAll()

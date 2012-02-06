@@ -11,8 +11,15 @@ try:
 except ImportError:
     sys.path.append(os.path.abspath('..'))
     from pyExpenses.Expense import Expense
+from pyExpenses.ConfigManip import Config
+from pyExpenses.Record import BaseRecord
 from TestRecManip import TEST_SAMPS
 
+
+def addSampleRecords(exp):
+    for rdate, recs in TEST_SAMPS.items():
+        for rec in recs:
+            exp.addRecord(rdate, rec)
 
 class TestExpense(unittest.TestCase):
 
@@ -20,7 +27,18 @@ class TestExpense(unittest.TestCase):
         self.expense = Expense()
 
     def test_addRecord(self):
-        pass
+        addSampleRecords(self.expense)
+        
+        recbuf = Config.getRecordBuffer()
+        self.assertEqual(
+            len(recbuf), 21
+        )
+        self.expense.setUp({'test':True})
+        
+        recbuf = Config.getRecordBuffer()
+        self.assertEqual(
+            len(recbuf), 0
+        )
 
     def test_deleteRecord(self):
         with self.assertRaises(AttributeError):
@@ -30,6 +48,7 @@ class TestExpense(unittest.TestCase):
             )
 
         self.expense.setUp({'test':True})
+        addSampleRecords(self.expense)
         
         self.expense.deleteRecord(
             date(2012, 1, 1),
@@ -43,6 +62,15 @@ class TestExpense(unittest.TestCase):
                 TEST_SAMPS[date(2012, 1, 1)][0],
                 TEST_SAMPS[date(2012, 1, 1)][1]
             )
+
+        self.expense.setUp({'test':True})
+        addSampleRecords(self.expense)
+        
+        self.expense.updateRecord(
+            date(2012, 1, 1),
+            TEST_SAMPS[date(2012, 1, 1)][0],
+            BaseRecord(15, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY')
+        )
 
     # def test_(self):
     #     pass
@@ -63,6 +91,7 @@ class TestExpense(unittest.TestCase):
         self.assertEqual(rec.currency, temrec.currency)
         self.assertEqual(rec.tag, temrec.tag)
         self.assertEqual(rec.comment, temrec.comment)
+
 
 
 

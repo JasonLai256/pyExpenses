@@ -6,114 +6,127 @@
         "version": "0.0.2"
     }, 
     "Currency": {
-        "default": "\uffe5", 
+        "default": "CHY", 
         "types": [
-            "\uffe5", 
-            "$"
+            "CHY", 
+            "USD"
         ]
     }, 
     "Payment": {
-        "default": "\u73b0\u91d1", 
+        "default": "Credit card", 
         "types": [
-            "\u73b0\u91d1", 
-            "\u4fe1\u7528\u5361", 
-            "\u8d26\u6237"
+            "Credit card", 
+            "Cash", 
+            "Transfer"
         ]
     }, 
     "Tag": {
-        "default": "", 
+        "default": "Expensive", 
         "types": [
+            "Expensive", 
             "", 
-            "\u666e\u901a", 
-            "\u8d5e", 
-            "\u676f\u5177", 
-            "\u8d25\u5bb6", 
-            "\u5b9e\u60e0", 
+            "Like", 
+            "Luxury", 
+            "Suck", 
+            "Tragedy", 
             "+1"
         ]
     }, 
     "Type": {
         "default": [
-            "\u98df\u54c1\u9152\u6c34", 
-            "\u6c34\u679c\u96f6\u98df"
+            "Digital devices", 
+            "Tablets"
         ], 
         "type_order": [
-            "\u98df\u54c1\u9152\u6c34", 
-            "\u8863\u670d\u9970\u54c1", 
-            "\u5c45\u5bb6\u7269\u4e1a", 
-            "\u884c\u8f66\u4ea4\u901a", 
-            "\u4ea4\u6d41\u901a\u8baf", 
-            "\u4f11\u95f2\u5a31\u4e50", 
-            "\u5b66\u4e60\u8fdb\u4fee", 
-            "\u4eba\u60c5\u5f80\u6765", 
-            "\u533b\u7597\u4fdd\u5065", 
-            "\u91d1\u878d\u4fdd\u9669", 
-            "\u5176\u4ed6"
+            "Digital devices", 
+            "Food & Drinks", 
+            "Recreation", 
+            "Transport costs", 
+            "Learning & Education", 
+            "Health care", 
+            "Clothes & Accessories", 
+            "Home property", 
+            "Communication", 
+            "Interpersonal exchanges", 
+            "Finance & Insurance", 
+            "Other"
         ], 
         "types": {
-            "\u4ea4\u6d41\u901a\u8baf": [
-                "\u5ea7\u673a\u8d39", 
-                "\u624b\u673a\u8d39", 
-                "\u4e0a\u7f51\u8d39", 
-                "\u90ae\u5bc4\u8d39"
+            "Clothes & Accessories": [
+                "Clothes & Pants", 
+                "Shoes", 
+                "Bags & Hats ", 
+                "Accessories"
             ], 
-            "\u4eba\u60c5\u5f80\u6765": [
-                "\u9001\u793c\u8bf7\u5ba2", 
-                "\u5b5d\u656c\u5bb6\u957f", 
-                "\u8fd8\u4eba\u94b1\u7269", 
-                "\u6148\u5584\u8d44\u52a9"
+            "Communication": [
+                "Calling charges", 
+                "Networking costs", 
+                "Delivety costs"
             ], 
-            "\u4f11\u95f2\u5a31\u4e50": [
-                "\u8fd0\u52a8\u5065\u8eab", 
-                "\u805a\u4f1a", 
-                "\u4f11\u95f2\u5a31\u4e50", 
-                "\u5ba0\u7269", 
-                "\u65c5\u6e38\u5ea6\u5047"
+            "Digital devices": [
+                "SmartPhones", 
+                "Game consoles", 
+                "Tablets", 
+                "Computers", 
+                "Music Players", 
+                "Digital cemaras", 
+                "Digital video cemaras"
             ], 
-            "\u5176\u4ed6": [
-                "\u5176\u4ed6\u652f\u51fa", 
-                "\u610f\u5916\u4e22\u5931", 
-                "\u70c2\u5e10\u635f\u5931"
+            "Finance & Insurance": [
+                "Bank charges", 
+                "Investment", 
+                "Repayment", 
+                "Taxes", 
+                "Insurance costs"
             ], 
-            "\u533b\u7597\u4fdd\u5065": [
-                "\u836f\u54c1", 
-                "\u4fdd\u5065", 
-                "\u7f8e\u5bb9", 
-                "\u6cbb\u7597"
+            "Food & Drinks": [
+                "Drinks", 
+                "Meal", 
+                "Snacks", 
+                "Fruits"
             ], 
-            "\u5b66\u4e60\u8fdb\u4fee": [
-                "\u4e66\u62a5\u6742\u5fd7", 
-                "\u57f9\u8bad\u8fdb\u4fee", 
-                "\u6570\u7801\u8bbe\u5907"
+            "Health care": [
+                "Medicines", 
+                "Health spending", 
+                "Cosmetics", 
+                "Treatment"
             ], 
-            "\u5c45\u5bb6\u7269\u4e1a": [
-                "\u65e5\u5e38\u7528\u54c1", 
-                "\u6c34\u7535\u7164\u6c14", 
-                "\u623f\u79df", 
-                "\u7269\u4e1a\u7ba1\u7406", 
-                "\u7ef4\u4fee\u4fdd\u517b"
+            "Home property": [
+                "Daily necessities", 
+                "Utilities", 
+                "Rent", 
+                "Household appliances", 
+                "Property management", 
+                "Maintenance costs"
             ], 
-            "\u884c\u8f66\u4ea4\u901a": [
-                "\u516c\u5171\u4ea4\u901a", 
-                "\u6253\u8f66\u79df\u8f66", 
-                "\u79c1\u5bb6\u8f66\u8d39\u7528"
+            "Interpersonal exchanges": [
+                "Gift", 
+                "Activity", 
+                "Charitable funding"
             ], 
-            "\u8863\u670d\u9970\u54c1": [
-                "\u8863\u670d\u88e4\u5b50", 
-                "\u978b\u5e3d\u5305\u5305", 
-                "\u5316\u5986\u9970\u54c1"
+            "Learning & Education": [
+                "Newspapers & Megazines", 
+                "Books", 
+                "Train & Education"
             ], 
-            "\u91d1\u878d\u4fdd\u9669": [
-                "\u94f6\u884c\u624b\u7eed", 
-                "\u6295\u8d44\u4e8f\u635f", 
-                "\u6309\u63ed\u8fd8\u6b3e", 
-                "\u6d88\u8d39\u7a0e\u6536", 
-                "\u5229\u606f\u652f\u51fa"
+            "Other": [
+                "Accidental loss", 
+                "Bad debt loss", 
+                "Loan"
             ], 
-            "\u98df\u54c1\u9152\u6c34": [
-                "\u65e9\u5348\u665a\u9910", 
-                "\u70df\u8336\u9152", 
-                "\u6c34\u679c\u96f6\u98df"
+            "Recreation": [
+                "Sports & Fitness", 
+                "Party", 
+                "Entertainment", 
+                "Hotal expenses", 
+                "Pet spending", 
+                "Tourist & Resort"
+            ], 
+            "Transport costs": [
+                "Public transport", 
+                "Taxi", 
+                "Private car costs", 
+                "Car rental"
             ]
         }
     }

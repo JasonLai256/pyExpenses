@@ -47,15 +47,15 @@ class TestConfigManip(unittest.TestCase):
     def test_addOptions(self):
         Config.addOption('Tag', u'+1')
         self.assertTrue('+1' in Config.obj['Tag']['types'])
-#        Config.addOption('Type', (u'礼物', u'Mac Mini'))
-#        assertTrue((u'礼物', u'Mac Mini') in )
+#        Config.addOption('Type', (u'Gift', u'Mac Mini'))
+#        assertTrue((u'Gift', u'Mac Mini') in )
 
     def test_delOptions(self):
-        Config.delOption('Currency', u'$')
-        self.assertTrue('$' not in Config.obj['Currency']['types'])
-        Config.addOption('Currency', u'$')
-#        Config.delOption('Type', (u'休闲娱乐', u'聚会'))
-#        assertTrue((u'休闲娱乐', u'聚会') not in )
+        Config.delOption('Currency', u'USD')
+        self.assertTrue('USD' not in Config.obj['Currency']['types'])
+        Config.addOption('Currency', u'USD')
+#        Config.delOption('Type', (u'Recreation', u'Party'))
+#        assertTrue((u'Recreation', u'Party') not in )
 
     def test_getDefaults(self):
         d = Config.getDefaults()
@@ -65,7 +65,7 @@ class TestConfigManip(unittest.TestCase):
         self.assertEqual(Config.obj['Tag']['default'], d[3])
 
     def test_setDefault(self):
-        rec = BaseRecord(1, (u'食品酒水', u'水果零食'), u'现金', u'￥')
+        rec = BaseRecord(1, (u'Food & Drinks', u'Snacks'), u'Cash', u'CHY')
         Config.setDefault(rec)
 
         self.assertEqual(Config.obj['Type']['default'], rec.type)
@@ -90,8 +90,9 @@ class TestConfigManip(unittest.TestCase):
         Config.setProjectBuffer(projbuf)
         bufobj = Config.getProjectBuffer()
         self.assertDictEqual(bufobj, projbuf)
+        Config.setProjectBuffer({})
 
-        rec = BaseRecord(1, (u'食品酒水', u'水果零食'), u'现金', u'￥')
+        rec = BaseRecord(1, (u'Food & Drinks', u'Snacks'), u'Cash', u'CHY')
         recbuf = [
             [
                 '2012-01-03',
@@ -107,6 +108,7 @@ class TestConfigManip(unittest.TestCase):
         Config.setRecordBuffer(recbuf)
         bufobj = Config.getRecordBuffer()
         self.assertListEqual(bufobj, recbuf)
+        Config.setRecordBuffer([])
 
 
 if __name__ == '__main__':

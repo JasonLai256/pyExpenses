@@ -27,7 +27,8 @@ class Expense(object):
         @Note: Should call setUp method to avoid AttributeError.
         """
         if not name.startswith('__') and \
-        name not in ('setUp', 'addRecord', 'isSetup', 'rec_m') and \
+        not name.startswith('_') and \
+        name not in ('setUp', 'addRecord', 'isSetup', 'rec_m', 'projects') and \
         not self.isSetup:
             raise AttributeError
 
@@ -48,16 +49,22 @@ class Expense(object):
         Config.setRecordBuffer(list())
 
     def addRecord(self, rdate, baserec):
-        # if self.isSetup:
-        #     self.rec_m.addItem(rdate, baserec)
-        #     Config.setDefaultType(baserec)
-        # else:
-            pass
+        if self.isSetup:
+            self.rec_m.addItem(rdate, baserec)
+            Config.setDefault(baserec)
+        else:
+            buf = record2buf(rdate, baserec)
+            recbuf = Config.getRecordBuffer()
+            recbuf.append(buf)
+            Config.setRecordBuffer(recbuf)
 
     def deleteRecord(self, rdate, baserec):
-        pass
+        self.rec_m.delItem(rdate, baserec)
 
     def updateRecord(self, rdate, baserec, updaterec):
+        self.rec_m.updateItem(rdate, baserec, updaterec)
+
+    def sumOfAmount(self):
         pass
 
     def figure_out(self, begin, end, parsers = []):

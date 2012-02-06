@@ -16,47 +16,47 @@ from pyExpenses.Record import BaseRecord
 
 TEST_SAMPS = {
     date(2012, 1, 1): [
-        BaseRecord(21, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY'),
-        BaseRecord(51, (u'食品酒水', u'水果零食'), u'现金', u'CHY', u'', u'a little regret.')
+        BaseRecord(21, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY'),
+        BaseRecord(51, (u'Food & Drinks', u'Snacks'), u'Cash', u'CHY', u'', u'a little regret.')
     ],
     date(2012, 1, 2): [
-        BaseRecord(18, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY')
+        BaseRecord(18, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY')
     ],
     date(2012, 1, 3): [
-        BaseRecord(18, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY'),
-        BaseRecord(13, (u'医疗保健', u'保健'), u'现金', u'CHY')
+        BaseRecord(18, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY'),
+        BaseRecord(13, (u'Health care', u'Health spending'), u'Cash', u'CHY')
     ],
     date(2012, 1, 4): [
-        BaseRecord(22, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY')
+        BaseRecord(22, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY')
     ],
     date(2012, 1, 5): [
-        BaseRecord(19, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY', ),
-        BaseRecord(121, (u'学习进修', u'书报杂志'), u'信用卡', u'CHY', u'赞'),
-        BaseRecord(11, (u'食品酒水', u'水果零食'), u'现金', u'CHY')
+        BaseRecord(19, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY', ),
+        BaseRecord(121, (u'Learning & Education', u'Books'), u'Credit card', u'CHY', u'Like'),
+        BaseRecord(11, (u'Food & Drinks', u'Snacks'), u'Cash', u'CHY')
     ],
     date(2012, 1, 7): [
-        BaseRecord(33, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY', u'赞', u'expensive but there is very nice experience.')
+        BaseRecord(33, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY', u'Like', u'expensive but there is very nice experience.')
     ],
     date(2012, 1, 8): [
-        BaseRecord(15, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY'),
-        BaseRecord(11, (u'食品酒水', u'水果零食'), u'现金', u'CHY')
+        BaseRecord(15, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY'),
+        BaseRecord(11, (u'Food & Drinks', u'Snacks'), u'Cash', u'CHY')
     ],
     date(2012, 1, 9): [
-        BaseRecord(20, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY')
+        BaseRecord(20, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY')
     ],
     date(2012, 1, 10): [
-        BaseRecord(18, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY'),
-        BaseRecord(14, (u'食品酒水', u'水果零食'), u'现金', u'CHY'),
-        BaseRecord(16, (u'行车交通', u'公共交通'), u'现金', u'CHY'),
-        BaseRecord(50, (u'休闲娱乐', u'休闲娱乐'), u'信用卡', u'CHY', u'', u'goto theater.')
+        BaseRecord(18, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY'),
+        BaseRecord(14, (u'Food & Drinks', u'Snacks'), u'Cash', u'CHY'),
+        BaseRecord(16, (u'Transport costs', u'Public Transport'), u'Cash', u'CHY'),
+        BaseRecord(50, (u'Recreation', u'Entertainment'), u'Credit card', u'CHY', u'', u'goto theater.')
     ],
     date(2012, 1, 12): [
-        BaseRecord(23, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY'),
-        BaseRecord(8, (u'食品酒水', u'水果零食'), u'现金', u'CHY')
+        BaseRecord(23, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY'),
+        BaseRecord(8, (u'Food & Drinks', u'Snacks'), u'Cash', u'CHY')
     ],
     date(2012, 1, 13): [
-        BaseRecord(20, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY'),
-        BaseRecord(1798, (u'学习进修', u'数码设备'), u'信用卡', u'CHY', u'败家', u'buy a nook tablet from taobao.')
+        BaseRecord(20, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY'),
+        BaseRecord(1798, (u'Digital devices', u'Tablets'), u'Credit card', u'CHY', u'Expensive', u'buy a nook tablet from taobao.')
     ]
 }
 
@@ -81,7 +81,7 @@ class TestRecManip(unittest.TestCase):
 
     def test_addItem(self):
         rdate = date(2011, 12, 28)
-        brec = BaseRecord(28, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY')
+        brec = BaseRecord(28, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY')
         self.rmanip.addItem(rdate, brec)
         
         res = self.rmanip.findDate(rdate)
@@ -97,7 +97,7 @@ class TestRecManip(unittest.TestCase):
         # print 'length: ', len(res)
         self.assertEqual(len(res[rdate]), 3)
 
-        brec = BaseRecord(11, (u'食品酒水', u'水果零食'), u'现金', u'CHY')
+        brec = BaseRecord(11, (u'Food & Drinks', u'Snacks'), u'Cash', u'CHY')
         self.rmanip.delItem(rdate, brec)
         res = self.rmanip.findDate(rdate)
         self.assertEqual(len(res[rdate]), 2)
@@ -108,7 +108,7 @@ class TestRecManip(unittest.TestCase):
         upd_rec = res[rdate][0]
         self.assertEqual(upd_rec.amount, 22.0)
 
-        new_rec = BaseRecord(33, (u'食品酒水', u'早午晚餐'), u'现金', u'CHY')
+        new_rec = BaseRecord(33, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY')
         self.rmanip.updateItem(rdate, upd_rec, new_rec)
         res = self.rmanip.findDate(rdate)
         self.assertEqual(res[rdate][0].amount, 33.0)

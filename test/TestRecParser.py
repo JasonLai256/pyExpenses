@@ -41,7 +41,7 @@ class TestRecParser(unittest.TestCase):
 
     def test_Type_Filter(self):
         parser = RP.MainParser(self.dataflow)
-        parser.append(RP.Type_Filter((u'食品酒水', u'早午晚餐'), 'type'))
+        parser.append(RP.Type_Filter((u'Food & Drinks', u'Meal'), 'type'))
         dummy1, dummy2, fseq = parser.parse()
         self.assertEqual(
             sum(rec.amount for rdate in fseq
@@ -50,16 +50,16 @@ class TestRecParser(unittest.TestCase):
         )
 
         parser = RP.MainParser(self.dataflow)
-        parser.append(RP.Type_Filter(u'学习进修', 'type'))
+        parser.append(RP.Type_Filter(u'Digital devices', 'type'))
         dummy1, dummy2, fseq = parser.parse()
         self.assertEqual(
             sum(rec.amount for rdate in fseq
                                for rec in fseq[rdate]),
-            1919.0
+            1798.0
         )
 
         parser = RP.MainParser(self.dataflow)
-        parser.append(RP.Type_Filter(u'信用卡', 'payment'))
+        parser.append(RP.Type_Filter(u'Credit card', 'payment'))
         dummy1, dummy2, fseq = parser.parse()
         self.assertEqual(
             sum(rec.amount for rdate in fseq
@@ -68,7 +68,7 @@ class TestRecParser(unittest.TestCase):
         )
 
         parser = RP.MainParser(self.dataflow)
-        parser.append(RP.Type_Filter(u'赞', 'tag'))
+        parser.append(RP.Type_Filter(u'Like', 'tag'))
         dummy1, dummy2, fseq = parser.parse()
         self.assertEqual(
             sum(rec.amount for rdate in fseq
@@ -144,19 +144,22 @@ class TestRecParser(unittest.TestCase):
         for key, amount, percent in analyres[0][1]:
             rdict[key] = amount
         self.assertEqual(
-            rdict[u'食品酒水'], 322.0
+            rdict[u'Food & Drinks'], 322.0
         )
         self.assertEqual(
-            rdict[u'学习进修'], 1919.0
+            rdict[u'Learning & Education'], 121.0
         )
         self.assertEqual(
-            rdict[u'行车交通'], 16.0
+            rdict[u'Digital devices'], 1798.0
         )
         self.assertEqual(
-            rdict[u'医疗保健'], 13.0
+            rdict[u'Transport costs'], 16.0
         )
         self.assertEqual(
-            rdict[u'休闲娱乐'], 50.0
+            rdict[u'Health care'], 13.0
+        )
+        self.assertEqual(
+            rdict[u'Recreation'], 50.0
         )
 
         
