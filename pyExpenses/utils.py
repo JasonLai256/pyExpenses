@@ -7,6 +7,7 @@ import codecs
 from datetime import date
 
 import ErrorHandle as EH
+from Record import BaseRecord
 
 
 def datecheck(date):
@@ -27,6 +28,24 @@ def to_date(da):
             return date(y, m, d)
     else:
         EH.valueError('date ({0}) format error.'.format(str(da)))
+
+def buf2record(buf):
+    rdate = to_date(buf[0])
+    rtype = buf[2], buf[3]
+    rec = BaseRecord(buf[1], rtype, buf[4], buf[5], buf[6], buf[7])
+    return rdate, rec
+
+def record2buf(rdate, rec):
+    return [
+        rdate.isoformat(),
+        rec.amount,
+        rec.type[0],
+        rec.type[1],
+        rec.payment,
+        rec.currency,
+        rec.tag,
+        rec.comment
+    ]
 
 
 class UTF8Recoder:

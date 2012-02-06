@@ -96,7 +96,8 @@ class TestConfigManip(unittest.TestCase):
             [
                 '2012-01-03',
                 rec.amount,
-                rec.type,
+                rec.type[0],
+                rec.type[1],
                 rec.payment,
                 rec.currency,
                 rec.tag,
