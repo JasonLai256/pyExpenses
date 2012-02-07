@@ -52,7 +52,7 @@ class ConsumingProject(Project):
         self.p_recursion = Recursion
 
         self._init_handler()
-        super(ConsumingProject, self).__init__(project_type='record')
+        super(ConsumingProject, self).__init__(project_type='statistic')
 
     def register(self, rdate, baserec, newrec=None, act='add'):
         """Register infomations of the specific record in the project for

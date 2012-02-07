@@ -11,6 +11,7 @@ try:
 except ImportError:
     sys.path.append(os.path.abspath('..'))
     from pyExpenses.Expense import Expense
+from pyExpenses import Projects
 from pyExpenses.ConfigManip import Config
 from pyExpenses.Record import BaseRecord
 from TestRecManip import TEST_SAMPS
@@ -72,8 +73,57 @@ class TestExpense(unittest.TestCase):
             BaseRecord(15, (u'Food & Drinks', u'Meal'), u'Cash', u'CHY')
         )
 
-    # def test_(self):
-    #     pass
+    def test_add_delete_and_list_project(self):
+        self.expense.setUp({'test':True})
+
+        class test:
+            pass
+
+        proj1 = Projects.ConsumingProject()
+        proj2 = Projects.ConsumingProject()
+        proj3 = test()
+        proj4 = test()
+        proj5 = test()
+        proj6 = test()
+        proj3.p_type = proj4.p_type = proj5.p_type = proj6.p_type = 'other'
+
+        self.expense.addProject('proj1', proj1)
+        self.expense.addProject('proj2', proj2)
+        self.expense.addProject('proj3', proj3)
+        self.expense.addProject('proj4', proj4)
+        self.expense.addProject('proj5', proj5)
+        self.expense.addProject('proj6', proj6)
+
+        self.assertEqual(
+            len(list(self.expense.listProject())), 6
+        )
+        self.assertEqual(
+            len(list(self.expense.listProject(ptype='statistic'))), 2
+        )
+        self.assertEqual(
+            len(list(self.expense.listProject(ptype='other'))), 4
+        )
+        for name, proj in self.expense.listProject():
+            self.assertTrue(name.startswith('proj'))
+            if proj.p_type == 'statistic':
+                self.assertIsNotNone(
+                    proj.export_to_dict()
+                )
+
+        self.expense.deleteProject('proj1')
+        self.expense.deleteProject('proj5')
+        self.assertEqual(
+            len(list(self.expense.listProject())), 4
+        )
+        self.assertEqual(
+            len(list(self.expense.listProject(ptype='statistic'))), 1
+        )
+        self.assertEqual(
+            len(list(self.expense.listProject(ptype='other'))), 3
+        )
+
+    def test_figureOutRecords(self):
+        pass
 
     def test_buf2record_and_record2buf(self):
         from pyExpenses.utils import buf2record, record2buf
