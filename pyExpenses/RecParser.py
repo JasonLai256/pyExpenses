@@ -18,9 +18,10 @@ Sequence[date1, date2, date3, ... , dateN]  # dict
 
 from decimal import Decimal
 from collections import deque
-from datetime import date
+from datetime import date, timedelta
 
 import ErrorHandle as EH
+from utils import to_date
 
 
 def asum(datas):
@@ -355,8 +356,8 @@ def consumingProjectParse(data):
 
     restOfGoal = data['p_target_amount'] - data['p_accumt_amount']
     averageOfRec = data['p_accumt_amount'] / data['p_recs_amount']
-    pastDates = (date.today() - data['p_start_time']).days
-    remainDates = data['p_period'].days - pastDates
+    pastDates = (date.today() - to_date(data['p_start_time'])).days
+    remainDates = data['p_period'] - pastDates
 
     # figure out the basic infomation of project.
     templist = [
@@ -370,9 +371,10 @@ def consumingProjectParse(data):
     retseq.extend(templist)
 
     # figure out the milestone of project target.
-    _date_milestone_check(
-        data['p_start_time'], data['p_period'], statdict
+    _milestone_check(
+        data['p_accumt_amount'], data['p_target_amount'], statdict
     )
+    # judge situations of project to process 
     if data['p_accomplish_date']:
         retseq.append(
             HAS_ACCOMPLISH.format(data['p_accomplish_date'])
@@ -393,19 +395,21 @@ def consumingProjectParse(data):
     # if project recursion is enable.
     if data['p_recursion']:
         retseq.append(
-            IS_RECURSION.format(statdict[''])
+            IS_RECURSION.format(data['p_period'])
         )
 
     return retseq
 
-def _date_milestone_check(bdate, period, statdict):
-    today = date.today()
+def _milestone_check(accumulated, target, statdict):
     if not statdict['hasQuarter']:
-        if today >= (bdate + period / 4):
+        if accumulated >= (target / 4):
             statdict['hasQuarter'] = True
-    elif not statdict['hasHalf']:
-        if today >= (bdate + period / 2):
+            statdict['DateOfQuarter'] = date.today().isoformat()
+    if not statdict['hasHalf']:
+        if accumulated >= (target / 2):
             statdict['hasHalf'] = True
-    elif not statdict['hasThreeQuarters']:
-        if today >= (bdate + period * 3 / 4):
+            statdict['DateOfHalf'] = date.today().isoformat()
+    if not statdict['hasThreeQuarters']:
+        if accumulated >= (target * 3 / 4):
             statdict['hasThreeQuarters'] = True
+            statdict['DateOfThreeQuarters'] = date.today().isoformat()

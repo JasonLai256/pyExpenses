@@ -122,6 +122,35 @@ class TestExpense(unittest.TestCase):
             len(list(self.expense.listProject(ptype='other'))), 3
         )
 
+    def test_save_and_setUp_Projects(self):
+        self.expense.setUp({'test':True})
+
+        proj1 = Projects.ConsumingProject(9999, date(2012, 1, 1), 3333)
+        proj2 = Projects.ConsumingProject(
+            999, date(2012, 1, 1), 3333, 'type', u'Food & Drinks'
+        )
+        self.expense.addProject('proj1', proj1)
+        self.expense.addProject('proj2', proj2)
+        addSampleRecords(self.expense)
+
+        self.expense.saveProjects()
+        expense2 = Expense()
+        expense2.setUp({'test':True})
+
+        self.assertEqual(len(expense2.projects), 2)
+        print expense2.projects
+        self.assertDictEqual(
+            expense2.projects['proj1'].export_to_dict(),
+            self.expense.projects['proj1'].export_to_dict()
+        )
+        self.assertDictEqual(
+            expense2.projects['proj2'].export_to_dict(),
+            self.expense.projects['proj2'].export_to_dict()
+        )
+
+        Config.setProjectBuffer(dict())
+        
+
     def test_figureOutRecords(self):
         pass
 
@@ -141,8 +170,6 @@ class TestExpense(unittest.TestCase):
         self.assertEqual(rec.currency, temrec.currency)
         self.assertEqual(rec.tag, temrec.tag)
         self.assertEqual(rec.comment, temrec.comment)
-
-
 
 
 if __name__ == '__main__':

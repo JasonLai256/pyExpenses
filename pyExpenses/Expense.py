@@ -48,6 +48,7 @@ class Expense(object):
     def addRecord(self, rdate, baserec):
         if self.isSetup:
             self.rec_m.addItem(rdate, baserec)
+            self._checkProjects(rdate, baserec, act='add')
             Config.setDefault(baserec)
         else:
             buf = record2buf(rdate, baserec)
@@ -57,9 +58,11 @@ class Expense(object):
 
     def deleteRecord(self, rdate, baserec):
         self.rec_m.delItem(rdate, baserec)
+        self._checkProjects(rdate, baserec, act='del')
 
     def updateRecord(self, rdate, baserec, updaterec):
         self.rec_m.updateItem(rdate, baserec, updaterec)
+        self._checkProjects(rdate, baserec, updaterec, act='upd')
 
     def listProject(self, ptype=None):
         if not ptype:
@@ -92,12 +95,11 @@ class Expense(object):
         return parser.parse()
     
     def saveProjects(self):
-        # savebuf = {}
-        # for name, proj in self.projects.items():
-        #     savebuf[name] = proj.export_to_dict()
-        #     savebuf[name]['projtype'] = proj.__class__.__name__
-        # Config.setProjectBuffer(savebuf)
-        pass
+        savebuf = {}
+        for name, proj in self.projects.items():
+            savebuf[name] = proj.export_to_dict()
+            savebuf[name]['projtype'] = proj.__class__.__name__
+        Config.setProjectBuffer(savebuf)
 
     def saveRecords(self):
         self.rec_m.save()
@@ -125,23 +127,30 @@ class Expense(object):
         pass
 
     def _setUpProjects(self):
-        # projbuf = Config.getProjectBuffer()
-        # for name, dictbuf in projbuf.items():
-        #     projtype = dictbuf['projtype']()
-        #     proj = Projects.__dict__[projtype]
-        #     self.projects[name] = proj.import_from_dict(dictbuf)
-        pass
+        projbuf = Config.getProjectBuffer()
+        if projbuf:
+            # projbuf is not a empty dict
+            for name, dictbuf in projbuf.items():
+                projtype = dictbuf['projtype']
+                proj = Projects.__dict__[projtype]()
+                proj.import_from_dict(dictbuf)
+                self.projects[name] = proj
 
     def _setUpRecords(self):
         recbuf = Config.getRecordBuffer()
-        for buf in recbuf:
-            rdate, rec = buf2record(buf)
-            self.addRecord(rdate, rec)
+        if recbuf:
+            # recbuf is not a empty list
+            for buf in recbuf:
+                rdate, rec = buf2record(buf)
+                self.addRecord(rdate, rec)
         # set record buffer up to default value a empty list.
         Config.setRecordBuffer(list())
 
     def _checkProjects(self, rdate, baserec, newrec=None, act='add'):
-        for proj in self.projects:
+        if not self.projects:
+            # there is no project in self.projects
+            return
+        
+        for proj in self.projects.values():
             if proj.p_type == 'statistic':
                 proj.register(rdate, baserec, newrec, act)
-
