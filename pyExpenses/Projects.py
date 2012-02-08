@@ -3,6 +3,7 @@
 
 from datetime import date, timedelta
 from RecParser import consumingProjectParse
+from utils import to_date
 
 
 class Project(object):
@@ -31,19 +32,28 @@ class Project(object):
     def export_to_dict(self):
         retval = {}
         for key in self.__dict__:
-            if key.startswith('p_'):
+            # the second expr is judge whether the value of key is None
+            if key == 'p_start_time':
+                retval[key] = self.__dict__[key].isoformat()
+            elif key == 'p_period':
+                retval[key] = self.__dict__[key].days
+            elif key.startswith('p_'):
                 retval[key] = self.__dict__[key]
         return retval
 
     def import_from_dict(self, importDict):
         for key in importDict:
-            if key.startswith('p_'):
+            if key == 'p_start_time':
+                self.__dict__[key] = to_date(importDict[key])
+            elif key == 'p_period':
+                self.__dict__[key] = timedelta(importDict[key])
+            elif key.startswith('p_'):
                 self.__dict__[key] = importDict[key]
 
 
 class ConsumingProject(Project):
-    def __init__(self, Target=-1, Bdate=None, Period=0, Type = None,
-                   Optcode = None, Recursion = False):
+    def __init__(self, Target=-1, Bdate=date(1970, 1, 1), Period=0, 
+                   Type = '', Optcode = '', Recursion = False):
         self.p_target_amount = float(Target)
         self.p_start_time = Bdate    # date of project started
         self.p_period = timedelta(int(Period))
@@ -140,15 +150,15 @@ class ConsumingProject(Project):
         if self.p_accumt_amount >= self.p_target_amount:
             if not self.p_accomplish_date:
                 # accomplish_date not had record.
-                self.p_accomplish_date = date.today()
+                self.p_accomplish_date = date.today().isoformat()
                 self.p_status = 222
         else:
             if self.p_accomplish_date:
                 # Accomplish_date had been recorded.
-                self.p_accomplish_date = None
+                self.p_accomplish_date = ''
                 self.p_status = 111
-            # always analyze the data if project not accomplish.
-            self._analyze()
+        # always analyze the data
+        self._analyze()
 
     def _analyze(self):
         """
@@ -159,7 +169,7 @@ class ConsumingProject(Project):
     def _init_handler(self):
         self.p_accumt_amount = 0.0    # accumulated amount
         self.p_recs_amount = 0    # amount of records were registered in project
-        self.p_accomplish_date = None    # accomplishing date of project purpose
+        self.p_accomplish_date = ''    # accomplishing date of project purpose
 
         self.p_info_history = {}
         self.p_progress_info = []
@@ -168,9 +178,9 @@ class ConsumingProject(Project):
             hasQuarter = False,
             hasHalf = False,
             hasThreeQuarters = False,
-            DateOfQuarter = None,
-            DateOfHalf = None,
-            DateOfThreeQuarters = None,
+            DateOfQuarter = '',
+            DateOfHalf = '',
+            DateOfThreeQuarters = ''
         )
 
     def _recursive_init(self):
