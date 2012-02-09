@@ -138,7 +138,6 @@ class TestExpense(unittest.TestCase):
         expense2.setUp({'test':True})
 
         self.assertEqual(len(expense2.projects), 2)
-        print expense2.projects
         self.assertDictEqual(
             expense2.projects['proj1'].export_to_dict(),
             self.expense.projects['proj1'].export_to_dict()

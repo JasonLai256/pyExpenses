@@ -3,32 +3,22 @@
 
 import json
 import os
+from os.path import abspath, join, dirname
 
 import ErrorHandle as EH
 
-_dirpath = [
-    os.path.abspath('.'),
-    os.path.abspath('..')
-]
-
 def _importObj(filename):
-    fpaths = []
-    for path in _dirpath:
-        fpaths.append(os.path.join(path, filename))
-    # iteratively try to open path that whether can find the config file
-    for path in fpaths:
-        if not os.path.isfile(path):
-            continue
-        if not os.path.getsize(path):
-            # the size of file is zero that contain nothing
-            with open(path, 'w') as tempfile:
-                print '\n** ', path, '\n'
-                json.dump(dict(), tempfile)   # create a empty json dict
-
-        return json.load(open(path))
-    else:
-        # can't find the config file
+    path = join(abspath(dirname(__file__)), filename)
+    
+    if not os.path.isfile(path):
         raise IOError
+    if not os.path.getsize(path):
+        # the size of file is zero that contain nothing
+        with open(path, 'w') as tempfile:
+            print '\n** ', path, '\n'
+            json.dump(dict(), tempfile)   # create a empty json dict
+
+    return json.load(open(path))
 
 def _exportObj(obj, filename, path=None):
     if path:
@@ -69,13 +59,15 @@ def _delTypeOpt(obj, mtype, subtype):
 
 class ConfiMeta(type):
     def __new__(cls, name, bases, dict):
-        try:
+        try:            
             dict['objfile'] = 'config.json'
             dict['buffile'] = 'databuf.json'
             dict['obj'] = _importObj(filename=dict['objfile'])
             # A storing object that contain the datas of project's buffer
             # and records buffer by json format.
             dict['bufobj'] = _importObj(filename=dict['buffile'])
+
+            dict['obj']['BaseInfo']['path'] = abspath(dirname(__file__))
         except IOError:
             EH.ioError(
                 "file ./confi.json not exist, can't initialise program."

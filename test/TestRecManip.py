@@ -64,7 +64,7 @@ TEST_SAMPS = {
 class TestRecManip(unittest.TestCase):
 
     def setUp(self):
-        self.path = os.path.abspath('.')
+        self.path = os.path.abspath(os.path.dirname(__file__))
         self.rmanip = RecManip()
         self.rmanip.setUp(test=True)
         for rdate, recs in TEST_SAMPS.items():

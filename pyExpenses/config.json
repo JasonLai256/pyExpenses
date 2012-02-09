@@ -1,9 +1,9 @@
 {
     "BaseInfo": {
         "Shadow": false, 
-        "language": "cn", 
-        "path": "/home/jason/expenses/test", 
-        "version": "0.0.2"
+        "language": "en", 
+        "path": "/home/jason/expenses/pyExpenses", 
+        "version": "0.3"
     }, 
     "Currency": {
         "default": "CHY", 
@@ -13,31 +13,32 @@
         ]
     }, 
     "Payment": {
-        "default": "Cash", 
+        "default": "Credit card", 
         "types": [
-            "Cash", 
             "Credit card", 
+            "Cash", 
             "Transfer"
         ]
     }, 
     "Tag": {
-        "default": "", 
+        "default": "Expensive", 
         "types": [
+            "Expensive", 
             "", 
             "Like", 
             "Luxury", 
             "Suck", 
-            "Expensive", 
             "Tragedy", 
             "+1"
         ]
     }, 
     "Type": {
         "default": [
-            "Food & Drinks", 
-            "Meal"
+            "Digital devices", 
+            "Tablets"
         ], 
         "type_order": [
+            "Digital devices", 
             "Food & Drinks", 
             "Recreation", 
             "Transport costs", 
@@ -45,7 +46,6 @@
             "Health care", 
             "Clothes & Accessories", 
             "Home property", 
-            "Digital devices", 
             "Communication", 
             "Interpersonal exchanges", 
             "Finance & Insurance", 
@@ -68,8 +68,8 @@
                 "Game consoles", 
                 "Tablets", 
                 "Computers", 
-                "Music Players",
-		"Storage devices",
+                "Music Players", 
+                "Storage devices", 
                 "Digital cemaras", 
                 "Digital video cemaras"
             ], 

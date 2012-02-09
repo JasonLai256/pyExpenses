@@ -20,7 +20,7 @@ class TestConfigManip(unittest.TestCase):
         self.obj = copy.deepcopy(Config.obj)
 
     def tearDown(self):
-        _exportObj(self.obj, Config.objfile, path=os.path.abspath('.'))
+        _exportObj(self.obj, Config.objfile)
 
     def test_getInfos(self):
         item = Config.getInfos('version')
@@ -30,7 +30,7 @@ class TestConfigManip(unittest.TestCase):
         )
 
     def test_setInfo(self):
-        Config.setInfo('language', u'en')
+        Config.setInfo('language', u'cn')
         self.assertNotEqual(
             self.obj['BaseInfo']['language'],
             Config.obj['BaseInfo']['language']
