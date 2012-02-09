@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 from datetime import date, timedelta
-from RecParser import consumingProjectParse
+from ProjectParse import consumingProjectParse
 from utils import to_date
 
 
