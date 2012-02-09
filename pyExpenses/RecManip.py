@@ -3,8 +3,10 @@
 
 from datetime import date, timedelta
 
-from RecManipImpl import *
+from ConfigManip import Config
+import RecManipImpl
 
+STORAGE_BACKEND = RecManipImpl.__dict__[Config.getInfo('StorageBackend')]
 
 class RecManip(object):
 
@@ -13,7 +15,7 @@ class RecManip(object):
         called after create a instance, the passing arguments can control
         defferent options.
         """
-        self.impl = PickleImpl(*args, **kwargs)
+        self.impl = STORAGE_BACKEND(*args, **kwargs)
 
     def addItem(self, rdate, base_rec):
         """add a basic record to storage."""

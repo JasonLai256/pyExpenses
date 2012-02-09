@@ -3,7 +3,6 @@
 
 import os
 
-logfile = os.path.join(os.getcwd(), 'errors.LOG')
     
 def valueError(estring):
     raise ValueError(estring)

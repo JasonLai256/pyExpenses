@@ -3,7 +3,8 @@
         "Shadow": false, 
         "language": "en", 
         "path": "/home/jason/expenses/pyExpenses", 
-        "version": "0.3"
+        "version": "0.3",
+	"StorageBackend": "PickleImpl"
     }, 
     "Currency": {
         "default": "CHY", 

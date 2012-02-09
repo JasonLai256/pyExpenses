@@ -24,7 +24,7 @@ def _exportObj(obj, filename, path=None):
     if path:
         fpath = os.path.join(path, filename)
     else:
-        fpath = os.path.join(Config.getInfos('path'), filename)
+        fpath = os.path.join(Config.getInfo('path'), filename)
     with open(fpath, 'w') as jfile:
         json.dump(obj, jfile, sort_keys=True, indent=4)
 
@@ -78,7 +78,7 @@ class Config(object):
     __metaclass__ = ConfiMeta
     
     @classmethod
-    def getInfos(cls, option):
+    def getInfo(cls, option):
         return cls.obj['BaseInfo'][option]
             
     @classmethod

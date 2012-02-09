@@ -20,7 +20,8 @@ import ErrorHandle as EH
 
 class PwdError(Exception):
     # TODO: maybe need to complete some features.
-    pass
+    def __init__(self):
+        super(PwdError, self).__init__()
         
 class _RecContainer(object):
     """Data container class inner defined."""
@@ -71,8 +72,6 @@ class PickleImpl(object):
                       +--> BaseRecord(att1, att2, ... , attN)  # class
 
     """
-    
-    
     def __init__(self, pwd='<!--#/**/;;//PyExpense-->', **kwargs):
         if kwargs.get('test', False) is True:
             # use default setting for test
@@ -197,7 +196,7 @@ class PickleImpl(object):
         writer.writerows(outlist)
 
     def _dump(self):
-        fpath = os.path.join(Config.getInfo('path'), 'records.dat')
+        fpath = os.path.join(Config.getInfo('path'), 'records.db')
         picfile = open(fpath, 'wb')
         Pickle.dump(self._reclist, picfile, 2)
         Pickle.dump(self._pwd, picfile, 2)
@@ -205,7 +204,7 @@ class PickleImpl(object):
         picfile.close()
 
     def _load(self, pwd):
-        fpath = os.path.join(Config.getInfo('path'), 'records.dat')
+        fpath = os.path.join(Config.getInfo('path'), 'records.db')
         isfile = os.path.isfile(fpath)
         if not isfile or not os.path.getsize(fpath):
             self._setdefault()
