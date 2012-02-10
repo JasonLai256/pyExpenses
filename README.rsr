@@ -2,31 +2,69 @@
 pyExpenses
 ==========
 
+pyExpenses is a python package for simply personal financial management.
+The purpose of pyExpenses is to support ...
 
 
+Features
+--------
+*
+*
+*
+*
+*
 
-Frame of Library
+
+Frame of Package
 ----------------
-
-
-
-Documentation
--------------
-
-
-
+                   +-------------------+
+                   | (Storage Backend) |
+                   |    RecManipImpl   |
+                   |                   |
+                   +------+------------+         +--------------+
+                          |                      |              |
+                          |                      |  ErrorHandle |
+                          V                      |              |
+                     +-----------+               +--------------+
+                     |           |
+     +-------------->|  RecManip |
+     |               |           |
+     |               +----+------+
+     |                    |                   (manage)
+     |                    |       +-------------+-------------------+
+     |                    |       |             |                   |
+     |                    V       |             |                   |
+     |              +-------------+-+           V                   V
++----+--------+     |               |      +-----------+      +------------+
+|             |     |  (Scheduler)  |      |           |      |            |
+| ConfigManip +---->|    Expense    |      | RecParser |      |  Projects  |
+|             |     |               |      |           |      |            |
++-----+-------+     |               |      +----+------+      +------+-----+
+      |             +--------+------+           |                    |
+      |                      |       +----------+                    |
+      |                      |       |        +----------------------+
+      |                      |       |        |
+      |                      V       V        V
+      |                   +---------------------+
+      +------------------>|                     |
+                          |        USER         |
+                          | (developer use api) |
+                          |                     |
+                          +---------------------+
 
 
 Installation
 ------------
+Installation is simple. You can install it by running::
 
+    $ pip install pyExpenses
 
+Or to get the latest development version from git::
 
-Who uses pyExpenses?
---------------------
+    $ git clone git://github.com/xxx/pyExpenses.git
 
 
 Support
 -------
 You can log issues on the Github issue tracker for this project.
-And welcome you can collaborate with author to maintain this project.
+And welcome you can collaborate with the author to maintain this project.

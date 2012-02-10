@@ -10,14 +10,24 @@ def read(*path):
 
 setup(name='pyExpenses',
       version=__version__,
-      description='',
+      description='pyExpenses is a python package for simply personal financial management.',
       author='Jason Lai',
       author_email='jasonlai256@gmail.com',
       maintainer='Jason Lai',
       maintainer_email='jasonlai256@gmail.com',
-      url='',
+      url='https://github.com/xxx/pyExpenses.git',
       packages=['pyExpenses'],
       long_description=read("README.rst"),
-      license="",
+      license="BSD",
       platforms=["any"],
+      classifiers=[
+          'Development Status :: 3 - Alpha',
+          'Environment :: Other Environment',
+          'Intended Audience :: Developers',
+          'License :: OSI Approved :: BSD License',
+          'Operating System :: OS Independent',
+          'Programming Language :: Python',
+          'Topic :: Office/Business :: Financial',
+          'Topic :: Software Development :: Libraries :: Python Modules'
+      ],
  )
