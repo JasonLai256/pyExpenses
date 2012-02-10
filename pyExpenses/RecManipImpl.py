@@ -27,6 +27,8 @@ from utils import UnicodeReader, UnicodeWriter, to_date
 import ErrorHandle as EH
 
 
+DEFAULT_PASSWORD = '<!--#/**/;;//PyExpenses-->'
+
 class PwdError(Exception):
     # TODO: maybe need to complete some features.
     def __init__(self):
@@ -81,7 +83,7 @@ class PickleImpl(object):
                       +--> BaseRecord(att1, att2, ... , attN)  # class
 
     """
-    def __init__(self, pwd='<!--#/**/;;//PyExpenses-->', **kwargs):
+    def __init__(self, pwd=DEFAULT_PASSWORD, **kwargs):
         if kwargs.get('test', False) is True:
             # use default setting for test
             self._setdefault()
@@ -100,6 +102,16 @@ class PickleImpl(object):
 
     # def __del__(self):
     #     self._dump()
+
+    def updatePassword(self, oldpwd, newpwd):
+        m = hashlib.sha256()
+        m.update(oldpwd)
+        if m.digest() != self._pwd:
+            raise PwdError
+
+        m = hashlib.sha256()
+        m.update(newpwd)
+        self._pwd = m.digest()
 
     def addItem(self, time, base_rec):
         """add a basic record to storage."""
@@ -238,7 +250,7 @@ class PickleImpl(object):
         self._reclist = []
         m = hashlib.sha256()
         # There is a default common pwd digest.
-        m.update('<!--#/**/;;//PyExpenses-->')
+        m.update(DEFAULT_PASSWORD)
         self._pwd = m.digest()
         self._len = 0
 

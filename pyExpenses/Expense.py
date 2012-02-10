@@ -44,6 +44,16 @@ class Expense(object):
 
         return super(Expense, self).__getattribute__(name)
 
+    def updatePassword(self, oldpwd, newpwd):
+        """Update the password of pyExpenses
+        """
+        self.rec_m.updatePassword(oldpwd, newpwd)
+
+    def cancelPassword(self, oldpwd):
+        """Do not use password authentication for pyExpenses
+        """
+        self.rec_m.cancelPassword(oldpwd)
+
     def setUp(self, rmArgs={}):
         """It's the method setup the Expense's instance, this should be
         called after initialise finish. 
@@ -93,9 +103,14 @@ class Expense(object):
         del self.projects[name]
 
     def allRecords(self):
+        """return a dataflow containing all records in storage.
+        """
         return self.rec_m.getAll()
 
     def recordsInDaterange(self, bdate, edate):
+        """return a dataflow containing specific records that specified
+        by date range in storage.
+        """
         return self.rec_m.date_range(bdate, edate)
 
     def figureOutRecords(self, bdate, edate, parsers = [], allrec=False):

@@ -26,6 +26,13 @@ class RecManip(object):
         """
         self.impl = STORAGE_BACKEND(*args, **kwargs)
 
+    def updatePassword(self, oldpwd, newpwd):
+        self.impl.updatePassword(oldpwd, newpwd)
+
+    def cancelPassword(self, oldpwd):
+        from RecManipImpl import DEFAULT_PASSWORD
+        self.impl.updatePassword(oldpwd, DEFAULT_PASSWORD)
+
     def addItem(self, rdate, base_rec):
         """add a basic record to storage."""
         self.impl.addItem(rdate, base_rec)
