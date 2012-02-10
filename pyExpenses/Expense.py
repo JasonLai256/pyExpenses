@@ -92,13 +92,19 @@ class Expense(object):
     def deleteProject(self, name):
         del self.projects[name]
 
-    # def sumOfAmount(self):
-    #     pass
+    def allRecords(self):
+        return self.rec_m.getAll()
 
-    def figureOutRecords(self, begin, end, parsers = []):
+    def recordsInDaterange(self, bdate, edate):
+        return self.rec_m.date_range(bdate, edate)
+
+    def figureOutRecords(self, bdate, edate, parsers = [], allrec=False):
         """
         """
-        data = self.rec_m.date_range(begin, end)
+        if allrec:
+            data = self.allRecords()
+        else:
+            data = self.rec_m.date_range(bdate, edate)
         parser = RP.MainParser(data)
         parser.extend(parsers)
         return parser.parse()
@@ -133,7 +139,10 @@ class Expense(object):
         Be careful when call this method, it should be make a warning
         message to the user.
         """
-        pass
+        self.rec_m.clear()
+        for key in self.projects:
+            del self.projects[key]
+        Config.setProjectBuffer(dict())
 
     def _setUpProjects(self):
         projbuf = Config.getProjectBuffer()

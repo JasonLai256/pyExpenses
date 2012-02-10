@@ -81,7 +81,7 @@ class PickleImpl(object):
                       +--> BaseRecord(att1, att2, ... , attN)  # class
 
     """
-    def __init__(self, pwd='<!--#/**/;;//PyExpense-->', **kwargs):
+    def __init__(self, pwd='<!--#/**/;;//PyExpenses-->', **kwargs):
         if kwargs.get('test', False) is True:
             # use default setting for test
             self._setdefault()
@@ -98,8 +98,8 @@ class PickleImpl(object):
         self.max_amount = 0.0
         self.max_amount_date = ''
 
-   # def __del__(self):
-   #     self._dump()
+    # def __del__(self):
+    #     self._dump()
 
     def addItem(self, time, base_rec):
         """add a basic record to storage."""
@@ -167,7 +167,9 @@ class PickleImpl(object):
             
         for ite in xrange(len(self._reclist)):
             del self._reclist[0]
-        self._len = 0
+        self._setdefault()
+        # save the empty status
+        self.save()
 
     def save(self):
         self._dump()
@@ -236,7 +238,7 @@ class PickleImpl(object):
         self._reclist = []
         m = hashlib.sha256()
         # There is a default common pwd digest.
-        m.update('<!--#/**/;;//PyExpense-->')
+        m.update('<!--#/**/;;//PyExpenses-->')
         self._pwd = m.digest()
         self._len = 0
 

@@ -13,6 +13,7 @@ except ImportError:
     from pyExpenses.Expense import Expense
 from pyExpenses import Projects
 from pyExpenses.ConfigManip import Config
+import pyExpenses.RecParser as RP
 from pyExpenses.Record import BaseRecord
 from TestRecManip import TEST_SAMPS
 
@@ -148,10 +149,73 @@ class TestExpense(unittest.TestCase):
         )
 
         Config.setProjectBuffer(dict())
-        
 
+    def test_recordsInDaterange(self):
+        self.expense.setUp({'test':True})
+        addSampleRecords(self.expense)
+
+        bdate = date(2012, 1, 2)
+        edate = date(2012, 1, 9)
+        recseq = self.expense.recordsInDaterange(bdate, edate)
+        # test number of days
+        self.assertEqual(len(recseq), 6)
+        # test number of records
+        self.assertEqual(
+            sum(len(recseq[dat]) for dat in recseq),
+            10
+        )
+        
     def test_figureOutRecords(self):
-        pass
+        self.expense.setUp({'test':True})
+        addSampleRecords(self.expense)
+
+        # test_General_Analys
+        analyres, dummy1, dummy2 = self.expense.figureOutRecords(None, None, allrec=True)
+        rdict = {}
+        for key, amount, percent in analyres[0][1]:
+            rdict[key] = amount
+        self.assertEqual(
+            rdict[u'Food & Drinks'], 322.0
+        )
+        self.assertEqual(
+            rdict[u'Learning & Education'], 121.0
+        )
+        self.assertEqual(
+            rdict[u'Digital devices'], 1798.0
+        )
+        self.assertEqual(
+            rdict[u'Transport costs'], 16.0
+        )
+        self.assertEqual(
+            rdict[u'Health care'], 13.0
+        )
+        self.assertEqual(
+            rdict[u'Recreation'], 50.0
+        )
+
+        # test_MthsInYear_Filter
+        dummy1, dummy2, fseq = self.expense.figureOutRecords(None, None, [RP.MthsInYear_Filter([1])], allrec=True)
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            2320.0
+        )
+
+        # test_Money_Filter
+        dummy1, dummy2, fseq = self.expense.figureOutRecords(None, None, [RP.Money_Filter(20)], allrec=True)
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            161.0
+        )
+
+        # test_Type_Filter
+        dummy1, dummy2, fseq = self.expense.figureOutRecords(None, None, [RP.Type_Filter((u'Food & Drinks', u'Meal'), 'type')], allrec=True)
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            227.0
+        )
 
     def test_buf2record_and_record2buf(self):
         from pyExpenses.utils import buf2record, record2buf

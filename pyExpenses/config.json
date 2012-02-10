@@ -1,10 +1,10 @@
 {
     "BaseInfo": {
         "Shadow": false, 
+        "StorageBackend": "PickleImpl", 
         "language": "en", 
         "path": "/home/jason/expenses/pyExpenses", 
-        "version": "0.3",
-	"StorageBackend": "PickleImpl"
+        "version": "0.3"
     }, 
     "Currency": {
         "default": "CHY", 
