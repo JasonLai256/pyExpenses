@@ -1,5 +1,14 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
+"""
+    pyExpenses.Record
+    ~~~~~~~~~~~~~~~~~
+
+    Implements the unit object of expense's record for pyExpenses.
+
+    :copyright: (c) 2012 by Jason Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 
 
 class BaseRecord(object):

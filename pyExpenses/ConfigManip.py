@@ -1,5 +1,14 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
+"""
+    pyExpenses.ConfigManip
+    ~~~~~~~~~~~~~~~~~~~~~~
+
+    Implements the configuration related objects.
+
+    :copyright: (c) 2012 by Jason Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 
 import json
 import os

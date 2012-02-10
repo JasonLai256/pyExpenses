@@ -1,5 +1,14 @@
 #!usr/bin/env python
 # -*- coding:utf-8 -*-
+"""
+    pyExpenses.ErrorHandle
+    ~~~~~~~~~~~~~~~~~~~~~~
+
+    Implements the error handle support for pyExpenses.
+
+    :copyright: (c) 2012 by Jason Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 
 import os
 

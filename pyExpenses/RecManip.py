@@ -1,5 +1,14 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
+"""
+    pyExpenses.RecManip
+    ~~~~~~~~~~~~~~~~~~~
+
+    Implements the interface's object that manipulator of records for pyExpenses.
+
+    :copyright: (c) 2012 by Jason Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 
 from datetime import date, timedelta
 

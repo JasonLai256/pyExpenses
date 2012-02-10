@@ -1,10 +1,15 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
+"""
+    pyExpenses.ProjectParse
+    ~~~~~~~~~~~~~~~~~~~~~~~
 
+    Implement the parsing functions for Projects.
+
+    :copyright: (c) 2012 by Jason Lai.
+    :license: BSD, see LICENSE for more details.
 """
-  following is parsing functions for Expense's Project.
-  
-"""
+
 from datetime import date, timedelta
 
 from utils import to_date

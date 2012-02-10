@@ -1,5 +1,14 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
+"""
+    pyExpenses.utils
+    ~~~~~~~~~~~~~~~~
+
+    Implements various utilities functions or class.
+
+    :copyright: (c) 2012 by Jason Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 
 import csv
 import cStringIO

@@ -1,5 +1,14 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
+"""
+    pyExpenses.Projects
+    ~~~~~~~~~~~~~~~~~~~
+
+    Implements the project's object for pyExpenses.
+
+    :copyright: (c) 2012 by Jason Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 
 from datetime import date, timedelta
 from ProjectParse import consumingProjectParse

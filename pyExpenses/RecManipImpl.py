@@ -1,5 +1,14 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
+"""
+    pyExpenses.RecManipImpl
+    ~~~~~~~~~~~~~~~~~~~~~~~
+
+    Implements the really implementing object that manipulator of records for pyExpenses.
+
+    :copyright: (c) 2012 by Jason Lai.
+    :license: BSD, see LICENSE for more details.
+"""
 
 import sys
 import os

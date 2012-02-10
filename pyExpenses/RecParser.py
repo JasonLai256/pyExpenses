@@ -1,19 +1,27 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
-
 """
-The format of seq -- data flow -- of RecorManip modure:
+    pyExpenses.RecParser
+    ~~~~~~~~~~~~~~~~~~~~
 
-Sequence[date1, date2, date3, ... , dateN]  # dict
-         --+---
-           | (mapping) (date : storage)
-           |
-           +--> Storage[baserec1, baserec2, ... , baserecN]  # list
-                        ---+----
-                           |
-                   +-------+
-                   |
-                   +--> BaseRecord(att1, att2, ... , attN)  # class
+    Implements the class of parsers for records parsing.
+
+    :copyright: (c) 2012 by Jason Lai.
+    :license: BSD, see LICENSE for more details.
+
+----------------------------------------------------
+THE FORMAT OF PARSING SEQUENCE THAT USE FOR PARSERS:
+
+    Sequence[date1, date2, date3, ... , dateN]  # dict
+             --+--
+               | (mapping) (date : storage)
+               |
+               +--> Storage[baserec1, baserec2, ... , baserecN]  # list
+                            ---+----
+                               |
+                       +-------+
+                       |
+                       +--> BaseRecord(att1, att2, ... , attN)  # class
 """
 
 from decimal import Decimal
