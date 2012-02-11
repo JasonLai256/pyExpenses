@@ -63,7 +63,7 @@ Installation is simple. You can install it by running::
 
 Or to get the latest development version from git::
 
-    $ git clone git://github.com/xxx/pyExpenses.git
+    $ git clone git://github.com/JasonLai256/pyExpenses.git
 
 
 Support
