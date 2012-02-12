@@ -4,9 +4,6 @@ import os
 from setuptools import setup
 from pyExpenses import __version__
 
-def read(*path):
-    return open(os.path.join(os.path.abspath(os.path.dirname(__file__)), *path)).read()
-
 
 setup(name='pyExpenses',
       version=__version__,
@@ -17,7 +14,6 @@ setup(name='pyExpenses',
       maintainer_email='jasonlai256@gmail.com',
       url='https://github.com/JasonLai256/pyExpenses.git',
       packages=['pyExpenses'],
-      long_description=read("README.rst"),
       license="BSD",
       platforms=["any"],
       classifiers=[
