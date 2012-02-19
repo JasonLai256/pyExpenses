@@ -1,36 +1,32 @@
 ==========
 pyExpenses
 ==========
-pyExpenses is a python package for simply personally financial management.
+pyExpenses 是一个第三方python包，应用于简单的个人财务支出管理。
 
-The purpose of pyExpenses is to provide a easy way - simple api invoke - to
-manage daily trivial expenses, and make it easy to analyze and statistic
-user records.
+pyExpenses的目的是提供一种简单的方法（简洁可用的api调用）去管理和记录个人日常开支，同时，
+可以很方便的对用户数据进行各类分析和统计。
 
 
-Features
---------
-* provide a set of api that easy to use to control all the things about
-  manage expenses;
+起源
+----------------
+对于个人理财，一直认为不需要太专业的功能，直观简洁更为重要。简单的开支记录和管理，配以良好的
+分析统计功能，就足以满足日常的需要。而现行绝大多数的理财软件都包含了支出、收入和转账之类的概
+念，不符合心中的需求，于是产生了自己写一个相关库来的想法。
 
-* surport a flexible and scalable mechanism for expenses storage, could
-  choose different storage backend from configuration(now has the Pickle
-  implementation, suppose will add the SQLite implementation in the future);
 
-* record parser that analyze user data has three types, including 'filter',
-  'analyzing' and 'statistic';
-
-* record parser is base on composition pattern, can flexibly compose parsers;
-
-* surport project concept that let the application can automatic to do many
-  useful thing for the user;
-
-* more project types will be provide;
-
+特性
+----------------
+* 一组用于管理用户支出记录的api，主要的理念是简洁性和可控制性；
+* 提供了灵活和可扩展的用户支出记录存储机制，可选择不同的存储后端(暂支持pickle实现，未来计划
+  增加sqlite支持)；
+* 具有3种类型的record parser去对分析统计用户数据，包括filter, analyzing和statistic；
+* record parser基于组合设计模式，能灵活进行各式查询分析组合；
+* 提供了 project 的概念，能让程序自动化的去管理或统计一些常用事项；
+* 更多的 project 类型将会被提供；
 * ...
 
 
-Frame of Package
+程序包的结构框架
 ----------------
 
 ::
@@ -71,18 +67,19 @@ Frame of Package
                            +---------------------+
 
 
-Installation
-------------
-Installation is simple. You can install it by running::
+安装
+----------------
+安装 pyExpenses 非常简单，可以直接使用pip安装::
 
     $ pip install pyExpenses
 
-Or to get the latest development version from git::
+或者使用git获取最新的代码::
 
     $ git clone git://github.com/JasonLai256/pyExpenses.git
 
 
-Support
--------
-You can log issues on the Github issue tracker for this project.
-And welcome you can collaborate with the author to maintain this project.
+支持
+----------------
+可以在 Github 的 issue tracker 里记录此程序包出现的问题。
+
+同时，非常欢迎你可以一起参与对这个项目的协作开发。
