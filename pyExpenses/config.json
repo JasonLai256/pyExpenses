@@ -14,18 +14,18 @@
         ]
     }, 
     "Payment": {
-        "default": "Credit card", 
+        "default": "Cash", 
         "types": [
-            "Credit card", 
-            "Cash", 
+            "Cash",
+	    "Credit card", 
             "Transfer"
         ]
     }, 
     "Tag": {
-        "default": "Expensive", 
+        "default": "", 
         "types": [
-            "Expensive", 
-            "", 
+            "",
+	    "Expensive", 
             "Like", 
             "Luxury", 
             "Suck", 
@@ -35,12 +35,12 @@
     }, 
     "Type": {
         "default": [
-            "Digital devices", 
-            "Tablets"
+            "Food & Drinks", 
+            "Meal"
         ], 
         "type_order": [
-            "Digital devices", 
-            "Food & Drinks", 
+            "Food & Drinks",
+	    "Digital devices", 
             "Recreation", 
             "Transport costs", 
             "Learning & Education", 
