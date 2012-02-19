@@ -83,7 +83,21 @@ class Expense(object):
         self.rec_m.updateItem(rdate, baserec, updaterec)
         self._checkProjects(rdate, baserec, updaterec, act='upd')
 
+    def allRecords(self):
+        """return a dataflow containing all records in storage.
+        """
+        return self.rec_m.getAll()
+
+    def getRecords(self, bdate, edate):
+        """return a dataflow containing specific records that specified
+        by date range in storage.
+        """
+        return self.rec_m.date_range(bdate, edate)
+    
     def listProject(self, ptype=None):
+        """Return all the projects of the Expense instance. If ptype is
+        provided, then return all the projects of specific type by ptype.
+        """
         if not ptype:
             return self.projects.iteritems()
         else:
@@ -94,35 +108,32 @@ class Expense(object):
             )
         
     def addProject(self, name, project):
+        """Add a specific project to Expense instance.
+        """
         if self.projects.has_key(name):
             return False
         self.projects[name] = project
         return True
 
     def deleteProject(self, name):
+        """Delete a specific project from Expense instance.
+        """
         del self.projects[name]
 
-    def allRecords(self):
-        """return a dataflow containing all records in storage.
+    def parseByRecords(self, records, parsers = []):
+        """Use the group of parsers to parse the records, and return the
+        parsing result.
         """
-        return self.rec_m.getAll()
-
-    def recordsInDaterange(self, bdate, edate):
-        """return a dataflow containing specific records that specified
-        by date range in storage.
-        """
-        return self.rec_m.date_range(bdate, edate)
-
-    def figureOutRecords(self, bdate, edate, parsers = [], allrec=False):
-        """
-        """
-        if allrec:
-            data = self.allRecords()
-        else:
-            data = self.rec_m.date_range(bdate, edate)
-        parser = RP.MainParser(data)
+        parser = RP.MainParser(records)
         parser.extend(parsers)
         return parser.parse()
+
+    def parseByDateRange(self, bdate, edate, parsers = []):
+        """Use the group of parsers to parse the records specify by date
+        range, and return the parsing result.
+        """
+        data = self.rec_m.date_range(bdate, edate)
+        return self.parseByRecords(data, parsers)
     
     def saveProjects(self):
         savebuf = {}

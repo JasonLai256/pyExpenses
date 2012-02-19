@@ -22,8 +22,8 @@ class TestConfigManip(unittest.TestCase):
     def tearDown(self):
         _exportObj(self.obj, Config.objfile)
 
-    def test_getInfos(self):
-        item = Config.getInfos('version')
+    def test_getInfo(self):
+        item = Config.getInfo('version')
         self.assertEqual(
             Config.obj['BaseInfo']['version'],
             item

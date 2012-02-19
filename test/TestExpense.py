@@ -150,13 +150,13 @@ class TestExpense(unittest.TestCase):
 
         Config.setProjectBuffer(dict())
 
-    def test_recordsInDaterange(self):
+    def test_getRecords(self):
         self.expense.setUp({'test':True})
         addSampleRecords(self.expense)
 
         bdate = date(2012, 1, 2)
         edate = date(2012, 1, 9)
-        recseq = self.expense.recordsInDaterange(bdate, edate)
+        recseq = self.expense.getRecords(bdate, edate)
         # test number of days
         self.assertEqual(len(recseq), 6)
         # test number of records
@@ -165,12 +165,14 @@ class TestExpense(unittest.TestCase):
             10
         )
         
-    def test_figureOutRecords(self):
+    def test_parseByRecords(self):
         self.expense.setUp({'test':True})
         addSampleRecords(self.expense)
 
+        allrecs = self.expense.allRecords()
+        
         # test_General_Analys
-        analyres, dummy1, dummy2 = self.expense.figureOutRecords(None, None, allrec=True)
+        analyres, dummy1, dummy2 = self.expense.parseByRecords(allrecs)
         rdict = {}
         for key, amount, percent in analyres[0][1]:
             rdict[key] = amount
@@ -194,7 +196,7 @@ class TestExpense(unittest.TestCase):
         )
 
         # test_MthsInYear_Filter
-        dummy1, dummy2, fseq = self.expense.figureOutRecords(None, None, [RP.MthsInYear_Filter([1])], allrec=True)
+        dummy1, dummy2, fseq = self.expense.parseByRecords(allrecs, [RP.MthsInYear_Filter([1])])
         self.assertEqual(
             sum(rec.amount for rdate in fseq
                                for rec in fseq[rdate]),
@@ -202,7 +204,7 @@ class TestExpense(unittest.TestCase):
         )
 
         # test_Money_Filter
-        dummy1, dummy2, fseq = self.expense.figureOutRecords(None, None, [RP.Money_Filter(20)], allrec=True)
+        dummy1, dummy2, fseq = self.expense.parseByRecords(allrecs, [RP.Money_Filter(20)])
         self.assertEqual(
             sum(rec.amount for rdate in fseq
                                for rec in fseq[rdate]),
@@ -210,7 +212,61 @@ class TestExpense(unittest.TestCase):
         )
 
         # test_Type_Filter
-        dummy1, dummy2, fseq = self.expense.figureOutRecords(None, None, [RP.Type_Filter((u'Food & Drinks', u'Meal'), 'type')], allrec=True)
+        dummy1, dummy2, fseq = self.expense.parseByRecords(allrecs, [RP.Type_Filter((u'Food & Drinks', u'Meal'), 'type')])
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            227.0
+        )
+
+    def test_parseByDateRange(self):
+        self.expense.setUp({'test':True})
+        addSampleRecords(self.expense)
+
+        bdate = date(2012, 1, 1)
+        edate = date(2012, 2, 9)
+        # test_General_Analys
+        analyres, dummy1, dummy2 = self.expense.parseByDateRange(bdate, edate)
+        rdict = {}
+        for key, amount, percent in analyres[0][1]:
+            rdict[key] = amount
+        self.assertEqual(
+            rdict[u'Food & Drinks'], 322.0
+        )
+        self.assertEqual(
+            rdict[u'Learning & Education'], 121.0
+        )
+        self.assertEqual(
+            rdict[u'Digital devices'], 1798.0
+        )
+        self.assertEqual(
+            rdict[u'Transport costs'], 16.0
+        )
+        self.assertEqual(
+            rdict[u'Health care'], 13.0
+        )
+        self.assertEqual(
+            rdict[u'Recreation'], 50.0
+        )
+
+        # test_MthsInYear_Filter
+        dummy1, dummy2, fseq = self.expense.parseByDateRange(bdate, edate, [RP.MthsInYear_Filter([1])])
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            2320.0
+        )
+
+        # test_Money_Filter
+        dummy1, dummy2, fseq = self.expense.parseByDateRange(bdate, edate, [RP.Money_Filter(20)])
+        self.assertEqual(
+            sum(rec.amount for rdate in fseq
+                               for rec in fseq[rdate]),
+            161.0
+        )
+
+        # test_Type_Filter
+        dummy1, dummy2, fseq = self.expense.parseByDateRange(bdate, edate, [RP.Type_Filter((u'Food & Drinks', u'Meal'), 'type')])
         self.assertEqual(
             sum(rec.amount for rdate in fseq
                                for rec in fseq[rdate]),

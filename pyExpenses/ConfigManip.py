@@ -79,7 +79,7 @@ class ConfiMeta(type):
             dict['obj']['BaseInfo']['path'] = abspath(dirname(__file__))
         except IOError:
             EH.ioError(
-                "file ./confi.json not exist, can't initialise program."
+                "file not exist, can't initialise program."
             )
         return super(cls, ConfiMeta).__new__(cls, name, bases, dict)
 
