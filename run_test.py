@@ -1,4 +1,4 @@
 import unittest
-import test
+import tests
 
-unittest.TextTestRunner(verbosity=2).run(test.suite())
+unittest.TextTestRunner(verbosity=2).run(tests.suite())
