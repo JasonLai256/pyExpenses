@@ -6,11 +6,7 @@ import sys
 import os
 from datetime import date
 
-try:
-    import pyExpenses.RecParser as RP
-except ImportError:
-    sys.path.append(os.path.abspath('..'))
-    import pyExpenses.RecParser as RP
+import pyExpenses.RecParser as RP
 from pyExpenses.Record import BaseRecord
 from pyExpenses.RecManip import RecManip
 from TestRecManip import TEST_SAMPS
@@ -161,8 +157,3 @@ class TestRecParser(unittest.TestCase):
         self.assertEqual(
             rdict[u'Recreation'], 50.0
         )
-
-        
-if __name__ == '__main__':
-    unittest.main()
-

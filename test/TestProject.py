@@ -6,11 +6,7 @@ import sys
 import os
 from datetime import date
 
-try:
-    from pyExpenses.Projects import *
-except ImportError:
-    sys.path.append(os.path.abspath('..'))
-    from pyExpenses.Projects import *
+from pyExpenses.Projects import *
 from pyExpenses.Expense import Expense
 from TestRecManip import TEST_SAMPS
 from TestExpense import addSampleRecords
@@ -115,8 +111,3 @@ class TestConsumingProject(unittest.TestCase):
             proj4.p_statdict['DateOfHalf'], date.today().isoformat()
         )
         self.assertEqual(len(proj4.p_progress_info), 7)
-
-
-        
-if __name__ == '__main__':
-    unittest.main()

@@ -6,11 +6,7 @@ import sys
 import os
 from datetime import date
 
-try:
-    from pyExpenses.RecManip import RecManip
-except ImportError:
-    sys.path.append(os.path.abspath('..'))
-    from pyExpenses.RecManip import RecManip
+from pyExpenses.RecManip import RecManip
 from pyExpenses.Record import BaseRecord
 
 
@@ -178,6 +174,3 @@ class TestRecManip(unittest.TestCase):
                                for rec in nres[keydate])
         )
 
-
-if __name__ == '__main__':
-    unittest.main()

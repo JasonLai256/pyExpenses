@@ -6,11 +6,7 @@ import sys
 import os
 import copy
 
-try:
-    from pyExpenses.ConfigManip import Config, _exportObj
-except ImportError:
-    sys.path.append(os.path.abspath('..'))
-    from pyExpenses.ConfigManip import Config, _exportObj
+from pyExpenses.ConfigManip import Config, _exportObj
 from pyExpenses.Record import BaseRecord
 
 
@@ -109,7 +105,3 @@ class TestConfigManip(unittest.TestCase):
         bufobj = Config.getRecordBuffer()
         self.assertListEqual(bufobj, recbuf)
         Config.setRecordBuffer([])
-
-
-if __name__ == '__main__':
-    unittest.main()

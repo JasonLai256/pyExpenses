@@ -6,11 +6,7 @@ import sys
 import os
 from datetime import date
 
-try:
-    from pyExpenses.Expense import Expense
-except ImportError:
-    sys.path.append(os.path.abspath('..'))
-    from pyExpenses.Expense import Expense
+from pyExpenses.Expense import Expense
 from pyExpenses import Projects
 from pyExpenses.ConfigManip import Config
 import pyExpenses.RecParser as RP
@@ -289,7 +285,3 @@ class TestExpense(unittest.TestCase):
         self.assertEqual(rec.currency, temrec.currency)
         self.assertEqual(rec.tag, temrec.tag)
         self.assertEqual(rec.comment, temrec.comment)
-
-
-if __name__ == '__main__':
-    unittest.main()
